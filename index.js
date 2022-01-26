@@ -1,8 +1,10 @@
 require('dotenv').config();
 const express = require('express');
+const bodyParser = require('body-parser');
 
 const app = express();
-const bodyParser = require('body-parser');
+app.use(bodyParser.json());
+
 // const errorMiddleware = require('./middlewares/error');
 const ProductController = require('./controllers/ProductController');
 
@@ -11,12 +13,13 @@ const {
   validateProductQuantity,
 } = require('./middlewares/validations');
 
-app.use(bodyParser.json());
-
 // não remova esse endpoint, e para o avaliador funcionar
 app.get('/', (_request, response) => {
   response.send();
 });
+
+app.get('/products', ProductController.getAllProducts);
+app.get('/products/:id', ProductController.findProductById);
 
 app.post(
   '/produtcs',
