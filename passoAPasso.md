@@ -10,3 +10,4 @@
 
 [6] Criar o services do product: aqui é onde acontece o intermédio entre o controller e o model e onde passamos as funções do model para o controller.
 
+[7] Criar o controller do product: aqui é onde é recebido os parametros da requisição através do body e enviados ao service.
