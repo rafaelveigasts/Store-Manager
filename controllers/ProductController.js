@@ -19,9 +19,21 @@ const getAllProducts = async (req, res) => {
   }
 };
 
+const findProductById = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const product = await ProductService.findProductById(id);
+    if (product.message) return res.status(product.code).json(product.message);
+    return res.status(200).json(product);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   createProduct,
   getAllProducts,
+  findProductById,
 };
 
 /* Anotação: controller é a camada mais próxima do usuário.
