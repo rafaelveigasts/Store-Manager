@@ -12,6 +12,11 @@ const createProduct = async ({ name, quantity }) => {
   };
 };
 
+const getAllProducts = async () => {
+  const [allProducts] = await connection.execute('SELECT * FROM StoreManager.products');
+  return allProducts;
+};
+
 const findProductByName = async (name) => {
   const [product] = await connection.execute(
     'SELECT * FROM StoreManager.products WHERE name = ?',
@@ -22,5 +27,6 @@ const findProductByName = async (name) => {
 
 module.exports = {
   createProduct,
+  getAllProducts,
   findProductByName,
 };
