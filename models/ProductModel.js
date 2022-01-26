@@ -14,15 +14,23 @@ const createProduct = async ({ name, quantity }) => {
 };
 
 const getAllProducts = async () => {
-  const [products] = await connection.execute('SELECT * FROM StoreManager.products');
+  const [products] = await connection.execute(
+    'SELECT * FROM StoreManager.products',
+  );
   return products;
 };
 
 const findProductById = async (id) => {
-  const [product] = await connection.execute(
+  const [result] = await connection.execute(
     'SELECT * FROM StoreManager.products WHERE id = ?',
     [id],
   );
+  const product = result[0];
+  
+  // se não encontrar o produto
+  if (!product) {
+    return null;
+  }
   return product;
 };
 
