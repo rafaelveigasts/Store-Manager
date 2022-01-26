@@ -1,5 +1,5 @@
-module.exports = (err, req, res, _next) => {
-  if (err.isJoi) {
+module.exports = (err, _req, res, _next) => {
+  if (err.status) {
     return res.status(400).json({
       status: 'error',
       message: err.details[0].message,
