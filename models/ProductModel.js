@@ -5,9 +5,9 @@ const createProduct = async ({ name, quantity }) => {
     'INSERT INTO StoreManager.products (name, quantity) VALUES (?, ?)',
     [name, quantity],
   );
-  
+
   return {
-    id: product.insertId,
+    id: product.insertId, // no bd id é autoincrement por isso o insertId
     name,
     quantity,
   };

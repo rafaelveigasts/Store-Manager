@@ -8,5 +8,5 @@
 
 [5] Criar o model do product: *primeiro passo do crud - create*. Toda conexão com o banco de dados é assíncrona então sempre usaremos async/await no model.
 
-
+[6] Criar o services do product: aqui é onde acontece o intermédio entre o controller e o model e onde passamos as funções do model para o controller.
 
