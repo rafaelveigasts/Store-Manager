@@ -1,11 +1,15 @@
 const connection = require('./connection');
 
-const createProduct = async (name, quantity) => {
+const createProduct = async ({ name, quantity }) => {
   const [product] = await connection.execute(
-    'INSERT INTO products (name, quantity) VALUES (?, ?)',
+    'INSERT INTO StoreManager.products (name, quantity) VALUES (?, ?)',
     [name, quantity],
   );
-  return product;
+  return {
+    id: product.insertId,
+    name,
+    quantity,
+  };
 };
 
 module.exports = {
