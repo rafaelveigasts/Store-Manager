@@ -21,7 +21,7 @@ const validateProductQuantity = (req, res, next) => {
   const { quantity } = req.body;
 
   // quando não é passado o quantity
-  if (!quantity) {
+  if (quantity === undefined) {
     return res.status(400).json({ message: '"quantity" is required' });
   }
 

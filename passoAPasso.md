@@ -13,3 +13,5 @@
 [7] Criar o controller do product: aqui é onde é recebido os parametros da requisição através do body e enviados ao service.
 
 [8] Criar o middleware de validação conforme os requisitos necessários.
+
+[9] Começar a ajustar o index.js
