@@ -10,8 +10,18 @@ const createProduct = async (req, res) => {
   }
 };
 
+const getAllProducts = async (req, res) => {
+  try {
+    const products = await ProductService.getAllProducts();
+    res.status(200).json(products);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   createProduct,
+  getAllProducts,
 };
 
 /* Anotação: controller é a camada mais próxima do usuário.
