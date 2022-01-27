@@ -15,3 +15,5 @@
 [8] Criar o middleware de validação conforme os requisitos necessários.
 
 [9] Começar a ajustar o index.js
+
+[10] Para efetuar o Create do crud, utilizamos o método post, onde o controller recebe as informações e utiliza na função createProduct, então essa função é exportada e recebida no service do product, *atenção* o controller recebe um objeto, no service desestruturamos esse objeto para ter acesso somente ao que precisamos e passamos essa informação para o model. No model com a desestruturação efetuamos a query no banco de dados.

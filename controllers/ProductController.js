@@ -13,7 +13,6 @@ const createProduct = async (req, res) => {
 const getAllProducts = async (req, res) => {
   try {
     const products = await ProductService.getAllProducts();
-    console.log('console do model', products);
     res.status(200).json(products);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -24,7 +23,9 @@ const findProductById = async (req, res) => {
   const { id } = req.params;
   try {
     const product = await ProductService.findProductById(id);
-    if (product.message) return res.status(product.code).json(product.message);
+    if (product.message) {
+      return res.status(product.code).json(product.message);
+    }
     return res.status(200).json(product);
   } catch (error) {
     return res.status(500).json({ message: error.message });

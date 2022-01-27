@@ -28,9 +28,9 @@ const findProductById = async (id) => {
   const product = result[0];
   
   // se não encontrar o produto
-  if (!product) {
-    return null;
-  }
+  // if (!product) {
+  //   return null;
+  // }
   return product;
 };
 
