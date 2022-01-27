@@ -27,10 +27,6 @@ const findProductById = async (id) => {
   );
   const product = result[0];
   
-  // se não encontrar o produto
-  // if (!product) {
-  //   return null;
-  // }
   return product;
 };
 
@@ -39,3 +35,10 @@ module.exports = {
   getAllProducts,
   findProductById,
 };
+
+/* 
+Anotações:
+O model é a camada mais próxima do BD, aqui executamos de fato as funções la do controller em formato de querys.
+
+Observação: a função findProductById retorna um array de resultados, por isso precisamos pegar o primeiro elemento do array.
+*/

@@ -65,7 +65,8 @@ A função findByProductId é uma das mais importantes, pois ela vai ser usada p
 Ela vai receber o id do parâmetro da requisição.
 Usamos o try para tentar recuperar o produto.
 Vai executar o findProductById no service que por sua vez vai executar o findProductById no model, assim recuperando o produto do bd.
-Se der certo ele retorna um status 200 e o produto.
+Se der certo ele retorna um status 200 e o produto.code e product.message. 
+Essas são chaves que serão usadas no service.
 Se der errado ele retorna um status 500 e uma mensagem de erro dentro do catch.
 
 */
