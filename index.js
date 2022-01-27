@@ -22,7 +22,7 @@ app.get('/products', ProductController.getAllProducts);
 app.get('/products/:id', ProductController.findProductById);
 
 app.post(
-  '/produtcs',
+  '/products',
   validateProductName,
   validateProductQuantity,
   ProductController.createProduct,

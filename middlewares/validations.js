@@ -1,5 +1,9 @@
-const validateProductName = (req, res, next) => {
+const Product = require('../services/ProductService');
+
+const validateProductName = async (req, res, next) => {
   const { name } = req.body;
+  const allProducts = await Product.getAllProducts();
+  const productExists = allProducts.find((product) => product.name === name);
 
   // quando não é passado o name
   if (!name) {
@@ -13,6 +17,11 @@ const validateProductName = (req, res, next) => {
     return res
       .status(422)
       .json({ message: '"name" length must be at least 5 characters long' });
+  }
+  
+  // quando o name já existe no banco de dados
+  if (productExists) {
+    return res.status(409).json({ message: 'Product already exists' });
   }
   next();
 };
@@ -29,7 +38,7 @@ const validateProductQuantity = (req, res, next) => {
   if (quantity <= 0 || typeof quantity !== 'number') {
     return res
       .status(422)
-      .json({ message: '"quantity" must be a number larger or equal to 1' });
+      .json({ message: '"quantity" must be a number larger than or equal to 1' });
   }
   next();
 };
