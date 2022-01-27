@@ -40,3 +40,7 @@ app.listen(process.env.PORT, () => {
 });
 
 // app.use(errorMiddleware);
+
+/* 
+Detalhe importante: ao fazer o update do item, primeiro verificar a quantidade depois o nome
+Pois nesse caso o é o que se adequa ao requisito. */
