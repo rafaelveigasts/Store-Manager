@@ -28,6 +28,13 @@ app.post(
   ProductController.createProduct,
 );
 
+app.put(
+  '/products/:id',
+  validateProductQuantity,
+  validateProductName,
+  ProductController.updateProductById,
+);
+
 app.listen(process.env.PORT, () => {
   console.log(`Escutando na porta ${process.env.PORT}`);
 });
