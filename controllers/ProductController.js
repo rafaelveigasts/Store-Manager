@@ -32,10 +32,29 @@ const findProductById = async (req, res) => {
   }
 };
 
+const updateProductById = async (req, res) => {
+  const { id } = req.params;
+  const { name, quantity } = req.body;
+  try {
+    const updatedProduct = await ProductService.updateProductById(
+      id,
+      name,
+      quantity,
+    );
+    if (updatedProduct.message) {
+      return res.status(updatedProduct.code).json(updatedProduct.message);
+    }
+    return res.status(200).json(updatedProduct);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   createProduct,
   getAllProducts,
   findProductById,
+  updateProductById,
 };
 
 /* Anotação: controller é a camada mais próxima do usuário.
@@ -69,4 +88,5 @@ Se der certo ele retorna um status 200 e o produto.code e product.message.
 Essas são chaves que serão usadas no service.
 Se der errado ele retorna um status 500 e uma mensagem de erro dentro do catch.
 
+A função updateProductById vai receber o id do produto e o nome e a quantidade do produto e a logica é bem parecida da função findByProductId.
 */
