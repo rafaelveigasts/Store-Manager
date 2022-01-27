@@ -26,14 +26,31 @@ const findProductById = async (id) => {
     [id],
   );
   const product = result[0];
-  
+
   return product;
+};
+
+const updateProductById = async (id, name, quantity) => {
+  const [updatedProduct] = await connection.execute(
+    'UPDATE StoreManager.products SET name = ?, quantity = ? WHERE id = ?',
+    [name, quantity, id],
+  );
+
+  // se não tiver linhas alteradas com o produto atualizado, retorna null
+  if (!updatedProduct.affectedRows) return null;
+
+  return {
+    id,
+    name,
+    quantity,
+  };
 };
 
 module.exports = {
   createProduct,
   getAllProducts,
   findProductById,
+  updateProductById,
 };
 
 /* 
@@ -41,4 +58,11 @@ Anotações:
 O model é a camada mais próxima do BD, aqui executamos de fato as funções la do controller em formato de querys.
 
 Observação: a função findProductById retorna um array de resultados, por isso precisamos pegar o primeiro elemento do array.
+
+A função updateProductById faz a atualização de um produto no bd.
+AffectedRows é uma propriedade do objeto que retorna do bd, se houve alguma alteração no bd. 
+Obtém o número de linhas afetadas pelo último INSERT, UPDATE, REPLACE ou DELETE associado ao link_identifier.
+fonte: https://www.php.net/manual/pt_BR/function.mysql-affected-rows.php
+Pra finalizar retornamos com o produto atualizado.
+
 */
