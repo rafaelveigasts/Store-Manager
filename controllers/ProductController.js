@@ -50,11 +50,25 @@ const updateProductById = async (req, res) => {
   }
 };
 
+const deleteProductById = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const deletedProduct = await ProductService.deleteProductById(id);
+    if (deletedProduct.message) {
+      return res.status(deletedProduct.code).json(deletedProduct.message);
+    }
+    return res.status(200).json(deletedProduct);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   createProduct,
   getAllProducts,
   findProductById,
   updateProductById,
+  deleteProductById,
 };
 
 /* Anotação: controller é a camada mais próxima do usuário.
@@ -89,4 +103,9 @@ Essas são chaves que serão usadas no service.
 Se der errado ele retorna um status 500 e uma mensagem de erro dentro do catch.
 
 A função updateProductById vai receber o id do produto e o nome e a quantidade do produto e a logica é bem parecida da função findByProductId.
+
+Diferente do update, o delete precisa somente do id do produto que vem através do parâmetro da requisição.
+Com isso usamos o try para deletar passando o productService.deleteProductById e retornando o status que é manipulado no service.
+Se der certo ele retorna um status 200 e uma mensagem de sucesso.
+Se der errado ele retorna um status 500 e uma mensagem de erro dentro do catch.
 */
