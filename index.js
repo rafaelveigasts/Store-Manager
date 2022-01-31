@@ -45,4 +45,7 @@ app.listen(process.env.PORT, () => {
 
 /* 
 Detalhe importante: ao fazer o update do item, primeiro verificar a quantidade depois o nome
-Pois nesse caso o é o que se adequa ao requisito. */
+Pois nesse caso o é o que se adequa ao requisito. 
+
+O delete não precisa tanto de validação, pois não tem nome nem quantidade só o id interessa.
+*/

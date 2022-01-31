@@ -17,3 +17,9 @@
 [9] Começar a ajustar o index.js
 
 [10] Para efetuar o Create do crud, utilizamos o método post, onde o controller recebe as informações e utiliza na função createProduct, então essa função é exportada e recebida no service do product, *atenção* o controller recebe um objeto, no service desestruturamos esse objeto para ter acesso somente ao que precisamos e passamos essa informação para o model. No model com a desestruturação efetuamos a query no banco de dados.
+
+[11] Para efetuar o Read do crud, utilizamos o método get, aqui é um pouco diferente pois os dados estão todos no BD, isso significa que o controller não recebe nada específico na requisição, ele faz a query direto no bd e retorna os resultados.
+
+[12] Para efetuar o Update do crud, utilizamos o método put, onde o controller recebe as informações da requisição, o id pelos params e o nome e quantidade pelo body e utiliza na função updateProductById, então essa função é exportada e recebida no service do product, que só repassa pro model os dados a serem atualizados atrávez da query.
+
+[13] Para efetuar o Delete do crud, utilizamos o método delete, onde o controller recebe as informações do id a ser deletado pelo param e utiliza na função deleteProductById, então essa função é exportada e recebida no service do product, *atenção* o controller recebe um objeto, no service desestruturamos esse objeto para ter acesso somente ao que precisamos e passamos essa informação para o model. No model com a desestruturação efetuamos a query no banco de dados.
