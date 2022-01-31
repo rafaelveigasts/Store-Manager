@@ -1,17 +1,27 @@
 const connection = require('./connection');
 
-const createSale = async ({ id, array }) => {
+const createSale = async () => {
   const [sale] = await connection.execute(
-    'INSERT INTO StoreManager.sales (id, array) VALUES (?, ?)',
-    [id, array],
+    'INSERT INTO StoreManager.sales () VALUES ()',
   );
   return sale.insertId;
 };
 
+const addProductToSale = async (saleId, productId, quantity) => {
+  const [sale] = await connection.execute(
+    'INSERT INTO StoreManager.sale_products (sale_id, product_id, quantity) VALUES (?, ?, ?)',
+    [saleId, productId, quantity],
+  );
+  return sale;
+};
+
 module.exports = {
   createSale,
+  addProductToSale,
 };
 
 /* 
-A funcção createSale recebe um array pois esse é um array de objetos que representam os produtos e quantidades que o usuário deseja comprar.
+A funcção createSale é a responsável por criar uma venda gerando um id para ela.
+
+A funcção addProductToSale é responsável por adicionar um produto a uma venda.
 */
