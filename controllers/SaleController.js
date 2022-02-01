@@ -5,6 +5,7 @@ const createSale = async (req, res) => {
   console.log('controller', body);
   try {
     const sale = await SaleService.addProductToSales(body);
+    console.log('sale do controler', sale);
     if (sale.message) return res.status(sale.code).json(sale.message);
     return res.status(201).json({ message: sale });
   } catch (error) {

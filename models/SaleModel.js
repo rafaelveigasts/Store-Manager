@@ -8,7 +8,7 @@ const createSale = async () => {
 };
 
 const addProductToSales = async (id, array) => {
-  /* const result =  */await connection.query(
+  /* const result =  */await connection.execute(
     'INSERT INTO StoreManager.sales_products VALUES(?)',
     [array],
   );

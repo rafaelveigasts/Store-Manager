@@ -8,7 +8,7 @@ const createSale = async () => {
 
 const addProductToSales = async (array) => {
   const saleValidation = saleValidations.checkProperty(array);
-  if (saleValidation.message) return saleValidations;
+  if (saleValidation.message) return saleValidation;
   const id = await createSale();
   const salesProducts = array.map((sale) => [id, sale.product_id, sale.quantity]);
   await SaleModel.addProductToSales(id, salesProducts);

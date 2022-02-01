@@ -1,17 +1,17 @@
 const checkProperty = (array) => {
   const hasUndefinedKey = array.some((sale) => sale.product_id === undefined);
   if (hasUndefinedKey) {
-    return { code: 400, message: { message: 'The product_id is required' } }; 
+    return { code: 400, message: { message: '"product_id" is required' } }; 
 }
   const hasEmptyQuantity = array.some((sale) => sale.quantity === undefined);
   if (hasEmptyQuantity) {
-    return { code: 400, message: { message: 'The quantity is required' } };
+    return { code: 400, message: { message: '"quantity" is required' } };
   }
   const hasNegativeQuantity = array.some((sale) =>
     (sale.quantity <= 0 || sale.quantity !== 'number'));
   if (hasNegativeQuantity) {
     return {
-      code: 400,
+      code: 422,
       message: { message: '"quantity" must be a number larger than or equal to 1' },
     };
   }
