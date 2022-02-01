@@ -2,16 +2,16 @@ const SaleModel = require('../models/SaleModel');
 const saleValidations = require('../middlewares/saleValidations');
 
 const createSale = async () => {
-  const [sale] = await SaleModel.createSale();
+  const sale = await SaleModel.createSale();
   return sale;
 };
 
-const createSaleProduct = async (array) => {
+const addProductToSales = async (array) => {
   const saleValidation = saleValidations.checkProperty(array);
   if (saleValidation.message) return saleValidations;
   const id = await createSale();
   const salesProducts = array.map((sale) => [id, sale.product_id, sale.quantity]);
-  await SaleModel.addProductToSales(salesProducts);
+  await SaleModel.addProductToSales(id, salesProducts);
   return {
     id, 
     itemSold: array,
@@ -19,7 +19,8 @@ const createSaleProduct = async (array) => {
 };
 
 module.exports = {
-  createSaleProduct,
+  addProductToSales,
+  createSale,
 };
 
 /* 

@@ -1,15 +1,14 @@
 const checkProperty = (array) => {
-  const hasUndefinedKey = array.some((sale) => 
-  Object.keys(sale).includes(undefined === 'product_id'));
+  const hasUndefinedKey = array.some((sale) => sale.product_id === undefined);
   if (hasUndefinedKey) {
     return { code: 400, message: { message: 'The product_id is required' } }; 
 }
-  const hasEmptyQuantity = array.some((sale) => Object.keys(sale).includes('' === 'quantity'));
+  const hasEmptyQuantity = array.some((sale) => sale.quantity === undefined);
   if (hasEmptyQuantity) {
     return { code: 400, message: { message: 'The quantity is required' } };
   }
   const hasNegativeQuantity = array.some((sale) =>
-    Object.keys(sale).includes(sale.quantity < 0 || typeof sale.quantity !== 'number'));
+    (sale.quantity <= 0 || sale.quantity !== 'number'));
   if (hasNegativeQuantity) {
     return {
       code: 400,

@@ -7,6 +7,7 @@ app.use(bodyParser.json());
 
 // const errorMiddleware = require('./middlewares/error');
 const ProductController = require('./controllers/ProductController');
+const SaleController = require('./controllers/SaleController');
 
 const {
   validateProductName,
@@ -27,6 +28,8 @@ app.post(
   validateProductQuantity,
   ProductController.createProduct,
 );
+
+app.post('/sales', SaleController.createSale);
 
 app.put(
   '/products/:id',
