@@ -1,23 +1,19 @@
 const connection = require('./connection');
 
 const createSale = async () => {
-  const [sale] = await connection.execute(
-    'INSERT INTO StoreManager.sales VALUES ()',
-  );
-  return sale.insertId;
+  const query = 'INSERT INTO StoreManager.sales VALUES ()';
+  const [result] = await connection.execute(query);
+  
+  return result.insertId;
 };
 
-const addProductToSales = async (id, array) => {
-  const result = await connection.execute(
-    'INSERT INTO StoreManager.sales_products VALUES(?)',
-    [array],
-  );
-  return { id: result.insertId };
+const createSalesProducts = async (id, array) => {
+  const query = 'INSERT INTO StoreManager.sales_products VALUES ?';
+  await connection.query(query, [array]);
 };
-
 module.exports = {
   createSale,
-  addProductToSales,
+  createSalesProducts,
 };
 
 /* 

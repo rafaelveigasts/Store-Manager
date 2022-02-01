@@ -1,26 +1,43 @@
-const SaleModel = require('../models/SaleModel');
-const saleValidations = require('../middlewares/saleValidations');
+const ModelSale = require('../models/SaleModel');
 
-const createSale = async () => {
-  const sale = await SaleModel.createSale();
-  return sale;
+const checkKey = (array) => {
+ const ckekProductKey = array.some((sale) => sale.product_id === undefined);
+ const ckekQuantityKey = array.some((sale) => sale.quantity === undefined);
+ const valuesQuantity = array
+ .some((sale) => sale.quantity <= 0 || typeof sale.quantity !== 'number');
+
+ if (ckekProductKey) { 
+   return { code: 400, message: { message: '"product_id" is required' } }; 
+  }
+  if (ckekQuantityKey) { 
+    return { code: 400, message: { message: '"quantity" is required' } }; 
+   } 
+   if (valuesQuantity) { 
+    return { code: 422,
+       message: { message: '"quantity" must be a number larger than or equal to 1' } }; 
+   }   
+  return true;
 };
 
-const addProductToSales = async (array) => {
-  const saleValidation = saleValidations.checkProperty(array);
-  if (saleValidation.message) return saleValidation;
+const createSale = async () => {
+  const result = await ModelSale.createSale();
+  return result;
+};
+
+const createSalesProducts = async (array) => {
+  const validations = checkKey(array);
+  if (validations.message) return validations;
   const id = await createSale();
-  const salesProducts = array.map((sale) => [id, sale.product_id, sale.quantity]);
-  await SaleModel.addProductToSales(id, salesProducts);
+  const sales = array.map((sale) => [id, sale.product_id, sale.quantity]);
+  await ModelSale.createSalesProducts(id, sales);
   return {
-    id, 
-    itemSold: array,
+    id,
+    itemsSold: array,
   };
 };
 
 module.exports = {
-  addProductToSales,
-  createSale,
+  createSalesProducts,
 };
 
 /* 
