@@ -2,12 +2,10 @@ const SaleService = require('../services/SaleService');
 
 const createSale = async (req, res) => {
   const { body } = req;
-  console.log('controller', body);
   try {
-    const sale = await SaleService.addProductToSales(body);
-    console.log('sale do controler', sale);
-    if (sale.message) return res.status(sale.code).json(sale.message);
-    return res.status(201).json({ message: sale });
+    const sales = await SaleService.addProductToSales(body);
+    if (sales.message) return res.status(sales.code).json(sales.message);
+    return res.status(201).json(sales);
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }

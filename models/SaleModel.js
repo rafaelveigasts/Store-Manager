@@ -8,11 +8,11 @@ const createSale = async () => {
 };
 
 const addProductToSales = async (id, array) => {
-  /* const result =  */await connection.execute(
+  const result = await connection.execute(
     'INSERT INTO StoreManager.sales_products VALUES(?)',
     [array],
   );
-  // return { id: result.insertId };
+  return { id: result.insertId };
 };
 
 module.exports = {

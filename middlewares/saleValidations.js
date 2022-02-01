@@ -1,14 +1,19 @@
 const checkProperty = (array) => {
+  const hasEmptyQuantity = array.some((sale) => sale.quantity === undefined);
+ 
+  const hasNegativeQuantity = array.some((sale) => 
+  sale.quantity <= 0 || typeof sale.quantity !== 'number');
+
   const hasUndefinedKey = array.some((sale) => sale.product_id === undefined);
+  
   if (hasUndefinedKey) {
     return { code: 400, message: { message: '"product_id" is required' } }; 
 }
-  const hasEmptyQuantity = array.some((sale) => sale.quantity === undefined);
+
   if (hasEmptyQuantity) {
     return { code: 400, message: { message: '"quantity" is required' } };
   }
-  const hasNegativeQuantity = array.some((sale) =>
-    (sale.quantity <= 0 || sale.quantity !== 'number'));
+
   if (hasNegativeQuantity) {
     return {
       code: 422,
