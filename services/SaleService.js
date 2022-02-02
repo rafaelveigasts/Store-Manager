@@ -48,9 +48,11 @@ CreateSale é uma função que cria uma venda no banco de dados.
 CreateSaleProduct recebe um array de objetos que representam os produtos que serão vendidos.
 Passa pela validação, caso tenha uma chave de erro retorna o erro.
 
-A constante id espera o banco de dados criar uma venda genérica.
+A constante id espera o banco de dados criar uma venda genérica, essa venda só retorna o numero do id no model.
 
 O salesProducts é um array de arrays que representa os produtos que serão vendidos.
 
 Mas quando o array de produtos é passado para o model, ele precisa de um id de venda, no formato de objeto, ou seja, um objeto que contenha um id de venda e dentro dele um array de produtos que são objetos com id de produto e quantidade.
+
+Obs.: não sei pq mas se deixar a validação do array separado ele não passa.
  */

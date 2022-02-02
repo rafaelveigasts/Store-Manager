@@ -16,6 +16,15 @@ module.exports = {
 };
 
 /*
-Aqui como vamos receber um objeto, temos que pegar todo o body da requisição .
+Antes nós extraíamos o que precisamos do body, mas agora iremos precisar do body como um objeto,
+por isso o uso do destructuring.
+
+instanciamos uma const com o nome de sales, que recebe o retorno do método createSalesProducts com todo o body.
+
+Se o sales tiver uma propriedade message é pq deu erro, então retornamos o status e o json da mensagem que será tratado no service.
+
+Se der certo retorna o status 201 e o json do sales.
+
+Depois só o catch pra tratar o erro.
 
 */
