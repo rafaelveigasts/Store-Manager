@@ -11,8 +11,18 @@ const createSale = async (req, res) => {
   }
 };
 
+const getAllSales = async (req, res) => {
+  try {
+    const sales = await SaleService.getAllSales();
+    return res.status(200).json(sales);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   createSale,
+  getAllSales,
 };
 
 /*
