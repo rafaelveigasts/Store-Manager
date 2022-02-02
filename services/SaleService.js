@@ -1,4 +1,4 @@
-const ModelSale = require('../models/SaleModel');
+const SaleModel = require('../models/SaleModel');
 
 const checkKey = (array) => {
  const ckekProductKey = array.some((sale) => sale.product_id === undefined);
@@ -20,7 +20,7 @@ const checkKey = (array) => {
 };
 
 const createSale = async () => {
-  const result = await ModelSale.createSale();
+  const result = await SaleModel.createSale();
   return result;
 };
 
@@ -29,7 +29,7 @@ const createSalesProducts = async (array) => {
   if (validations.message) return validations;
   const id = await createSale();
   const sales = array.map((sale) => [id, sale.product_id, sale.quantity]);
-  await ModelSale.createSalesProducts(id, sales);
+  await SaleModel.createSalesProducts(id, sales);
   return {
     id,
     itemsSold: array,
@@ -37,12 +37,12 @@ const createSalesProducts = async (array) => {
 };
 
 const getAllSales = async () => {
-  const allSales = await ModelSale.getAllSales();
+  const allSales = await SaleModel.getAllSales();
   return allSales;
 };
 
 const getSaleById = async (id) => {
-  const sale = await ModelSale.getSaleById(id);
+  const sale = await SaleModel.getSaleById(id);
 
   if (!sale) return { code: 404, message: { message: 'Sale not found' } };
 

@@ -31,8 +31,17 @@ const getSaleById = async (id) => {
   const [sale] = await connection.execute(query, [id]);
   const result = sale[0];
 
-  if (!result.lenght) return null;
+  if (!sale.length) return null;
 
+  return result;
+};
+
+const updateSaleById = async (id, { product_id: productId, quantity }) => {
+  const query = `UPDATE StoreManager.sales_products 
+  SET product_id = ?, quantity= ?
+  WHERE sale_id = ?`;
+  const [result] = await connection.execute(query, [productId, quantity, id]);
+  if (!result.changedRows) return null;
   return result;
 };
 
@@ -41,6 +50,7 @@ module.exports = {
   createSalesProducts,
   getAllSales,
   getSaleById,
+  updateSaleById,
 };
 
 /* 
