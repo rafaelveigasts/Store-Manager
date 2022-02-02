@@ -40,6 +40,11 @@ app.put(
   ProductController.updateProductById,
 );
 
+app.put(
+  '/sales/:id',
+  SaleController.updateSaleById,
+);
+
 app.delete('/products/:id', ProductController.deleteProductById);
 
 app.listen(process.env.PORT, () => {
