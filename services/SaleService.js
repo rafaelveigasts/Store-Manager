@@ -36,8 +36,14 @@ const createSalesProducts = async (array) => {
   };
 };
 
+const getAllSales = async () => {
+  const allSales = await ModelSale.getAllSales();
+  return allSales;
+};
+
 module.exports = {
   createSalesProducts,
+  getAllSales,
 };
 
 /* 
