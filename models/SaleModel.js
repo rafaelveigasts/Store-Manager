@@ -13,8 +13,7 @@ const createSalesProducts = async (id, array) => {
 };
 
 const getAllSales = async () => {
-  const query = `SELECT p.sale_id as saleId,s.date,
-  p.product_id,p.quantity
+  const query = `SELECT s.date,p.product_id,p.quantity
   FROM StoreManager.sales_products as p
   INNER JOIN StoreManager.sales as s
   ON p.sale_id = s.id`;
@@ -27,13 +26,12 @@ const getSaleById = async (id) => {
   FROM StoreManager.sales_products as p
   INNER JOIN StoreManager.sales as s
   ON p.sale_id = s.id
-  WHERE s.id = ${id}`;
+  WHERE s.id = ?`;
   const [sale] = await connection.execute(query, [id]);
-  const result = sale[0];
 
-  if (!sale.length) return null;
+  if (!sale) return null;
 
-  return result;
+  return sale;
 };
 
 const updateSaleById = async (id, { product_id: productId, quantity }) => {

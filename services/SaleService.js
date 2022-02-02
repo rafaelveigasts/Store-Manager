@@ -37,14 +37,17 @@ const createSalesProducts = async (array) => {
 };
 
 const getAllSales = async () => {
-  const allSales = await SaleModel.getAllSales();
-  return allSales;
+  const sales = await SaleModel.getAllSales();
+  return sales;
 };
 
 const getSaleById = async (id) => {
   const sale = await SaleModel.getSaleById(id);
 
-  if (!sale) return { code: 404, message: { message: 'Sale not found' } };
+  if (!sale) {
+    return { code: 404, 
+      message: { message: 'Sale not found' } };
+  }
 
   return sale;
 };
@@ -53,7 +56,7 @@ const updateSaleById = async (id, arrayBody) => {
   const validations = checkKey(arrayBody);
   if (validations.message) return validations;
   const [saleUpdate] = arrayBody;
-  await SaleModel.update(id, saleUpdate);
+  await SaleModel.updateSaleById(id, saleUpdate);
   return {
     saleId: id,
     itemUpdated: arrayBody,
