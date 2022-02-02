@@ -49,10 +49,22 @@ const getSaleById = async (id) => {
   return sale;
 };
 
+const updateSaleById = async (id, arrayBody) => {
+  const validations = checkKey(arrayBody);
+  if (validations.message) return validations;
+  const [saleUpdate] = arrayBody;
+  await SaleModel.update(id, saleUpdate);
+  return {
+    saleId: id,
+    itemUpdated: arrayBody,
+  };
+};
+
 module.exports = {
   createSalesProducts,
   getAllSales,
   getSaleById,
+  updateSaleById,
 };
 
 /* 

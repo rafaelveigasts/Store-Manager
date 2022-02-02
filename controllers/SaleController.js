@@ -31,10 +31,23 @@ const getSaleById = async (req, res) => {
   }
 };
 
+const updateSaleById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { body } = req;
+    const updatedSale = await SaleService.updateSaleById(id, body);
+    if (updatedSale.message) return res.status(updatedSale.code).json(updatedSale.message);
+    return res.status(200).json(updatedSale);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   createSale,
   getAllSales,
   getSaleById,
+  updateSaleById,
 };
 
 /*
