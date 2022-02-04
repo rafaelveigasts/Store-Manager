@@ -64,7 +64,7 @@ const updateSaleById = async (id, arrayBody) => {
 };
 
 const deleteSaleById = async (id) => {
-  const sale = await SaleModel.deleteSaleById(id);
+  const sale = await SaleModel.getSaleById(id);
 
   if (!sale) {
     return { code: 404, 
