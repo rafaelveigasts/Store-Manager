@@ -4,6 +4,7 @@ const createProduct = async (req, res) => {
   try {
     const { name, quantity } = req.body;
     const newProduct = await ProductService.createProduct({ name, quantity });
+    if (newProduct.message) return res.status(newProduct.code).json(newProduct.message);
     res.status(201).json(newProduct);
   } catch (error) {
     res.status(500).json({ message: error.message });

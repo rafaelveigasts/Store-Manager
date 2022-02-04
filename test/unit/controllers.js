@@ -217,18 +217,9 @@ describe("Ao chamao o controler de getSaleById", () => {
       response.status = sinon.stub().returns(response);
       response.json = sinon.stub().returns();
 
-      sinon.stub(SaleService, "getSaleById").resolves([
-        {
-          date: "2021-09-09T04:54:29.000Z",
-          product_id: 1,
-          quantity: 2,
-        },
-        {
-          date: "2021-09-09T04:54:54.000Z",
-          product_id: 2,
-          quantity: 2,
-        },
-      ]);
+      sinon
+        .stub(SaleService, "getSaleById")
+        .resolves({ code: 404, message: { message: "Sale not found" } });
     });
 
     after(() => {
@@ -238,7 +229,7 @@ describe("Ao chamao o controler de getSaleById", () => {
     it("É chamado com o status 404", async () => {
       await SaleController.getSaleById(request, response);
 
-      expect(response.status.calledWith(404)).to.be.true;
+      expect(response.status.calledWith(404)).to.be.equal(true);
     });
   });
 
@@ -250,17 +241,6 @@ describe("Ao chamao o controler de getSaleById", () => {
       request.params = {
         id: 1,
       };
-
-      response.status = sinon.stub().returns(response);
-      response.json = sinon.stub().returns();
-
-      sinon.stub(SaleService, "getSaleById").resolves({
-        id: 1,
-        itemsSold: {
-          product_id: 1,
-          quantity: 10,
-        },
-      });
 
       response.status = sinon.stub().returns(response);
       response.json = sinon.stub().returns();
@@ -286,13 +266,13 @@ describe("Ao chamao o controler de getSaleById", () => {
     it("É chamado com o status 200", async () => {
       await SaleController.getSaleById(request, response);
 
-      expect(response.status.calledWith(200)).to.be.true;
+      expect(response.status.calledWith(200)).to.be.equal(true);
     });
 
     it("É chamado o json com o objeto", async () => {
       await SaleController.getSaleById(request, response);
 
-      expect(response.json.calledWith(sinon.match.array)).to.be.true;
+      expect(response.json.calledWith(sinon.match.array)).to.be.equal(true);
     });
   });
 });
@@ -329,13 +309,13 @@ describe("Ao chamar o controller de getAllSales", () => {
     it("É chamado com o status 200", async () => {
       await SaleController.getAllSales(request, response);
 
-      expect(response.status.calledWith(200)).to.be.true;
+      expect(response.status.calledWith(200)).to.be.equal(true);
     });
 
     it("É chamado o json com o objeto", async () => {
       await SaleController.getAllSales(request, response);
 
-      expect(response.json.calledWith(sinon.match.array)).to.be.true;
+      expect(response.json.calledWith(sinon.match.array)).to.be.equal(true);
     });
   });
 });

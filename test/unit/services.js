@@ -1,31 +1,31 @@
 const sinon = require("sinon");
 const { expect } = require("chai");
-const connection = require("../../models/connection");
-const SaleModel = require("../../models/SaleModel");
+const ProductService = require("../../services/ProductService");
 const SaleService = require("../../services/SaleService");
 const ProductModel = require("../../models/ProductModel");
-const ProductService = require("../../services/ProductService");
+const SaleModel = require("../../models/SaleModel");
+const connection = require("../../models/connection");
 
 describe("Verifica se insere um produto no DB", () => {
   describe("Verifica é o produto é inserido com sucesso", () => {
     const payload = {
-      name: "Produto 1",
-      quantity: 10,
+      name: "teste2",
+      quantity: 2,
     };
 
     before(() => {
       sinon.stub(ProductModel, "getAllProducts").resolves([
         {
-          id: 11,
-          name: "Produto 1",
-          quantity: 11,
+          id: 1,
+          name: "teste",
+          quantity: 4,
         },
       ]);
 
       sinon.stub(ProductModel, "createProduct").resolves({
         id: 1,
-        name: "teste 1",
-        quantity: 11,
+        name: "teste",
+        quantity: 2,
       });
     });
 
@@ -36,7 +36,11 @@ describe("Verifica se insere um produto no DB", () => {
 
     it("Retorna um obj", async () => {
       const result = await ProductService.createProduct(payload);
-      expect(result).to.be.an("object");
+      expect(result).to.be.a("object");
+    });
+
+    it("O objeto deve ter as propriedades corretas", async () => {
+      const result = await ProductService.createProduct(payload);
       expect(result).to.have.property("id");
       expect(result).to.have.property("name");
       expect(result).to.have.property("quantity");
@@ -69,7 +73,7 @@ describe("Verifica se insere um produto no DB", () => {
       const execute = [
         {
           id: 1,
-          name: "Produto 1",
+          name: "produto",
           quantity: 10,
         },
       ];
@@ -84,6 +88,10 @@ describe("Verifica se insere um produto no DB", () => {
     it('O objeto é retornado corretamente', async() => {
       const result = await ProductService.findProductById(1);
       expect(result).to.be.an('object');
+    });
+
+    it('O objeto deve ter as propriedades corretas', async() => {
+      const result = await ProductService.findProductById(1);
       expect(result).to.have.property('id');
       expect(result).to.have.property('name');
       expect(result).to.have.property('quantity');
@@ -101,7 +109,7 @@ describe("Verifica se insere um produto no DB", () => {
 
       after(() => {
         SaleModel.createSale.restore()
-        SaleModel.createSalesProducs.restore()
+        SaleModel.createSalesProducts.restore()
       })
 
       it('Deve retornar um objeto com o produto inserido', async() => { 
@@ -112,6 +120,23 @@ describe("Verifica se insere um produto no DB", () => {
       })
     })
   })
+
+describe('Busca uma venda no Db', () => {
+  describe('Quando a venda não é localizada', () => {
+    before(()=> {
+      sinon.stub(SaleModel, 'findSaleById').resolves(null)
+    })
+
+    after(() => {
+      SaleModel.findSaleById.restore()
+    })
+
+    it('Deve retornar um objeto ', async() => {
+      const result = await SaleService.findSaleById()
+      expect(result).to.be.a('object')
+    })
+  })
+})
 
   describe('Quando a venda é localizada com sucesso', () => {
     before(async() => {
@@ -137,9 +162,6 @@ describe("Verifica se insere um produto no DB", () => {
     it('Deve retornar um array', async() => {
       const result = await SaleService.getSaleById(1)
       expect(result).to.be.an('array')
-      expect(result).to.have.property('date')
-      expect(result).to.have.property('product_id')
-      expect(result).to.have.property('quantity')
     })
 
     it('O array deve estar populado', async()=> {
@@ -173,15 +195,11 @@ describe("Verifica se insere um produto no DB", () => {
 
     it('Deve retornar um array', async() => {
       const result = await SaleService.getAllSales()
-      expect(result).to.be.an('array')
-      expect(result).to.have.property('date')
-      expect(result).to.have.property('product_id')
-      expect(result).to.have.property('quantity')
+      expect(result).to.be.a('array')
     })
 
     it('O array deve estar populado', async()=> {
       const result = await SaleService.getAllSales()
-      expect(result).to.be.an('array')
       expect(result).length.greaterThan(0)
     })
   })
