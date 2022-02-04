@@ -47,6 +47,8 @@ app.put(
 
 app.delete('/products/:id', ProductController.deleteProductById);
 
+app.delete('/sales/:id', SaleController.deleteSaleById);
+
 app.listen(process.env.PORT, () => {
   console.log(`Escutando na porta ${process.env.PORT}`);
 });
