@@ -1,4 +1,4 @@
-const SaleModel = require('../models/SaleModel');
+const SaleModel = require('../models/Sale');
 
 const checkKey = (array) => {
  const ckekProductKey = array.some((sale) => sale.product_id === undefined);

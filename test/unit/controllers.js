@@ -1,10 +1,10 @@
 const sinon = require("sinon");
 const { expect } = require("chai");
 
-const SaleService = require("../../services/SaleService");
-const ProductService = require("../../services/ProductService");
-const SaleController = require("../../controllers/SaleController");
-const ProductController = require("../../controllers/ProductController");
+const SaleService = require("../../services/Sale");
+const ProductService = require("../../services/Product");
+const SaleController = require("../../controllers/Sale");
+const ProductController = require("../../controllers/Product");
 
 describe("Ao chamar create no controller", () => {
   describe("quando o payload não é valido", () => {
