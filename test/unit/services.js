@@ -139,5 +139,48 @@ describe("Verifica se insere um produto no DB", () => {
       expect(result).to.have.property('product_id')
       expect(result).to.have.property('quantity')
     })
+
+    it('O array deve estar populado', async()=> {
+      const result = await SaleService.getSaleById(1)
+      expect(result).to.be.an('array')
+      expect(result).length.greaterThan(0)
+    })
+  })
+
+  describe('Lista todas as vendas', async() => {
+    before(async() => {
+      const execute = [
+        { 
+          date: "2021-09-09T04:54:29.000Z",
+          product_id: 1,
+          quantity: 2
+        },
+        {
+          date: "2021-09-09T04:54:54.000Z",
+          product_id: 2,
+          quantity: 2
+        }
+      ]
+
+      sinon.stub(SaleModel, 'getAllSales').resolves(execute)
+    })
+
+    after(async() => {
+      SaleModel.getAllSales.restore()
+    })
+
+    it('Deve retornar um array', async() => {
+      const result = await SaleService.getAllSales()
+      expect(result).to.be.an('array')
+      expect(result).to.have.property('date')
+      expect(result).to.have.property('product_id')
+      expect(result).to.have.property('quantity')
+    })
+
+    it('O array deve estar populado', async()=> {
+      const result = await SaleService.getAllSales()
+      expect(result).to.be.an('array')
+      expect(result).length.greaterThan(0)
+    })
   })
 });
