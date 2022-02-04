@@ -1,4 +1,4 @@
-const Product = require('../services/ProductService');
+const Product = require('../services/Product');
 
 const validateProductName = async (req, res, next) => {
   const { name } = req.body;

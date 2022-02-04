@@ -6,8 +6,8 @@ const app = express();
 app.use(bodyParser.json());
 
 // const errorMiddleware = require('./middlewares/error');
-const ProductController = require('./controllers/ProductController');
-const SaleController = require('./controllers/SaleController');
+const ProductController = require('./controllers/Product');
+const SaleController = require('./controllers/Sale');
 
 const {
   validateProductName,
