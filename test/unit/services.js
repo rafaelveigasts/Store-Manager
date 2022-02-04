@@ -13,19 +13,19 @@ describe("Verifica se insere um produto no DB", () => {
       quantity: 10,
     };
 
-    before(async () => {
+    before(() => {
       sinon.stub(ProductModel, "getAllProducts").resolves([
         {
-          id: 1,
+          id: 11,
           name: "Produto 1",
-          quantity: 10,
+          quantity: 11,
         },
       ]);
 
       sinon.stub(ProductModel, "createProduct").resolves({
         id: 1,
-        name: "Produto 1",
-        quantity: 10,
+        name: "teste 1",
+        quantity: 11,
       });
     });
 
@@ -42,6 +42,8 @@ describe("Verifica se insere um produto no DB", () => {
       expect(result).to.have.property("quantity");
     });
   });
+
+});
 
   describe("Verifica a busca de um produto", () => {
     before(async () => {
@@ -183,4 +185,3 @@ describe("Verifica se insere um produto no DB", () => {
       expect(result).length.greaterThan(0)
     })
   })
-});

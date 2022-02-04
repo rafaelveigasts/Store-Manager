@@ -1,13 +1,10 @@
 const sinon = require("sinon");
 const { expect } = require("chai");
 
-const connection = require("../../models/connection");
-
 const SaleService = require("../../services/SaleService");
 const ProductService = require("../../services/ProductService");
 const SaleController = require("../../controllers/SaleController");
 const ProductController = require("../../controllers/ProductController");
-const res = require("express/lib/response");
 
 describe("Ao chamar create no controller", () => {
   describe("quando o payload não é valido", () => {
@@ -31,8 +28,7 @@ describe("Ao chamar create no controller", () => {
 
     it("É chamado com o status 400", async () => {
       await ProductController.createProduct(request, response);
-
-      expect(response.status.calledWith(400)).to.be.true;
+      expect(response.status.calledWith(400)).to.be.equal(true);
     });
   });
 
@@ -42,16 +38,16 @@ describe("Ao chamar create no controller", () => {
 
     before(() => {
       request.body = {
-        name: "Produto 1",
-        quantity: 10,
+        name: "teste 1",
+        quantity: 2,
       };
 
       response.status = sinon.stub().returns(response);
       response.json = sinon.stub().returns();
 
       sinon
-        .createStubInstance(ProductService, "createProduct")
-        .resolves({ id: 1, name: "Produto 1", quantity: 10 });
+        .stub(ProductService, "createProduct")
+        .resolves({ id: 1, name: "Produto 1", quantity: 2 });
     });
 
     after(() => {
@@ -61,36 +57,46 @@ describe("Ao chamar create no controller", () => {
     it("É retornado o código 201", async () => {
       await ProductController.createProduct(request, response);
 
-      expect(response.status.calledWith(201)).to.be.true;
+      expect(response.status.calledWith(201)).to.be.equal(true);
     });
 
     it("É chamado o método json com o obj", async () => {
-      const response = {};
-      const request = {};
+      await ProductController.createProduct(request, response);
 
-      begore(() => {
-        request.params = {
-          id: 1000,
-        };
-
-        response.status = sinon.stub().returns(response);
-        response.json = sinon.stub().returns();
-
-        sinon
-          .stub(ProductService, "findProductById")
-          .resolves({ code: 404, message: { message: "Product not found" } });
-      });
-
-      after(() => {
-        ProductService.findProductById.restore();
-      });
-    });
-    it("404 é chamado1", async () => {
-      await ProductController.findProductById(request, response);
-
-      expect(response.status.calledWith(404)).to.be.true;
+      expect(response.json.calledWith(sinon.match.object)).to.be.equal(true);
     });
   });
+});
+
+describe("Ao chamar o controller com findProductById", () => {
+  describe("quando não existe o produto", () => {
+    const response = {};
+    const request = {};
+
+    before(() => {
+      request.params = {
+        id: 100,
+      };
+
+      response.status = sinon.stub().returns(response);
+      response.json = sinon.stub().returns();
+
+      sinon
+        .stub(ProductService, "findProductById")
+        .resolves({ code: 404, message: { message: "Product not found" } });
+    });
+
+    after(() => {
+      ProductService.findProductById.restore();
+    });
+  });
+
+  it("404 é chamado1", async () => {
+    await ProductController.findProductById(request, response);
+
+    expect(response.status.calledWith(404)).to.be.equal(true);
+  });
+
   describe("quando é localizado", () => {
     const response = {};
     const request = {};
@@ -105,7 +111,7 @@ describe("Ao chamar create no controller", () => {
 
       sinon
         .stub(ProductService, "findProductById")
-        .resolves({ id: 1, name: "Produto 1", quantity: 10 });
+        .resolves({ id: 1, name: "produto A", quantity: 10 });
     });
 
     after(() => {
@@ -256,73 +262,74 @@ describe("Ao chamao o controler de getSaleById", () => {
       sinon.stub(SaleService, "getSaleById").resolves([
         {
           date: "2021-09-09T04:54:29.000Z",
-            product_id: 1,
-            quantity: 2
-          },
-          {
-            date: "2021-09-09T04:54:54.000Z",
-            product_id: 2,
-            quantity: 2
-        }
-      ])
+          product_id: 1,
+          quantity: 2,
+        },
+        {
+          date: "2021-09-09T04:54:54.000Z",
+          product_id: 2,
+          quantity: 2,
+        },
+      ]);
     });
 
     after(() => {
       SaleService.getSaleById.restore();
-    })
+    });
 
     it("É chamado com o status 200", async () => {
       await SaleController.getSaleById(request, response);
 
       expect(response.status.calledWith(200)).to.be.true;
-
-    })
+    });
 
     it("É chamado o json com o objeto", async () => {
       await SaleController.getSaleById(request, response);
 
       expect(response.json.calledWith(sinon.match.array)).to.be.true;
-    })
+    });
   });
 });
 
-describe('Ao chamar o controller de getAllSales', () => {
-  describe('quando litas todas as vendas com sucesso', () => {
+describe("Ao chamar o controller de getAllSales", () => {
+  describe("quando litas todas as vendas com sucesso", () => {
     const response = {};
     const request = {};
 
-    before(()=> {
+    before(() => {
       request.body = {};
 
       response.status = sinon.stub().returns(response);
-      response.json = sinon.stub(SaleService, 'getAllSales').resolves([{
-        saleId: 1,
-        date: "2021-09-09T04:54:29.000Z",
-        product_id: 1,
-        quantity: 2
-      },
-      {
-        saleId: 1,
-        date: "2021-09-09T04:54:54.000Z",
-        product_id: 2,
-        quantity: 2
-      }])
-    })
+      response.json = sinon.stub(SaleService, "getAllSales").resolves([
+        {
+          saleId: 1,
+          date: "2021-09-09T04:54:29.000Z",
+          product_id: 1,
+          quantity: 2,
+        },
+        {
+          saleId: 1,
+          date: "2021-09-09T04:54:54.000Z",
+          product_id: 2,
+          quantity: 2,
+        },
+      ]);
+    });
 
-    after(()=> {
-      SaleService.getAllSales.restore()
-    })
+    after(() => {
+      SaleService.getAllSales.restore();
+    });
 
-    it('É chamado com o status 200', async () => {
+    it("É chamado com o status 200", async () => {
       await SaleController.getAllSales(request, response);
 
       expect(response.status.calledWith(200)).to.be.true;
-    })
+    });
 
-    it('É chamado o json com o objeto', async () => {
+    it("É chamado o json com o objeto", async () => {
       await SaleController.getAllSales(request, response);
 
       expect(response.json.calledWith(sinon.match.array)).to.be.true;
-    })
-  })
-})
+    });
+  });
+});

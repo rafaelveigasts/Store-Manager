@@ -29,14 +29,10 @@ describe('Verifica se o produto é inserido no DB', () => {
     it('Deve retornar um objeto com o produto inserido', async() => {
       const result = await ProductModel.createProduct(payload);
       expect(result).to.be.a('object');
-     })
-
-     it('possui as propriedades', async() => {
-      const result = await ProductModel.createProduct(payload);
       expect(result).to.have.property('id');
       expect(result).to.have.property('name');
       expect(result).to.have.property('quantity');
-     })
+    })
   })
 
   describe('Verifica se o produto está no DB', () => {
@@ -58,7 +54,7 @@ describe('Verifica se o produto é inserido no DB', () => {
   describe('Verifica se um produto é localizado com sucesso', () => {
     it('Deve retornar um objeto com o produto localizado', async() => {
       const result = await ProductModel.findProductById(1);
-      expect(result).to.be.an('object');
+      expect(result).to.be.a('object');
       expect(result).to.have.property('id');
       expect(result).to.have.property('name');
       expect(result).to.have.property('quantity');
@@ -69,7 +65,7 @@ describe('Verifica se o produto é inserido no DB', () => {
     before( async() => {
       const execute =[[]];
 
-      sinon.stub(ProductModel, 'execute').resolves(execute);
+      sinon.stub(connection, 'execute').resolves(execute);
     })
 
     after( async()=> {
@@ -98,7 +94,7 @@ describe('Verifica se o produto é inserido no DB', () => {
 
     it('Deve retornar um objeto com o id da venda', async() => {
       const result = await SaleModel.createSalesProducts(payload);
-      expect(result).to.be.an('object');
+      expect(result).to.be.a('object');
       expect(result).to.have.property('id');
     })
   })
@@ -126,12 +122,12 @@ describe('Verifica se o produto é inserido no DB', () => {
   describe('Quando a venda é localizada verifica se:', () => {
     it('Retorna um array', async() => {
       const result = await SaleModel.getSaleById(1);
-      expect(result).to.be.an('array');
+      expect(result).to.be.a('array');
     })
 
     it('O array está populado', async () => {
       const result = await SaleModel.getSaleById(1);
-      expect(result).to.have.greaterThan(0);
+      expect(result).length.greaterThan(0);
     })
   })
 
@@ -148,7 +144,7 @@ describe('Verifica se o produto é inserido no DB', () => {
 
     it('Retorna um null', async() => {
       const result = await SaleModel.getSaleById(1);
-      expect(result).to.be.null;
+      expect(result).to.be.equal(null);
     })
   })
 
@@ -166,23 +162,23 @@ describe('Verifica se o produto é inserido no DB', () => {
     }
   ]
 
-      sinon.stub(connection,'execute').resolves(execute);
+      sinon.stub(SaleModel,'getAllSales').resolves(execute);
     })
 
     after( async() => {
-      connection.execute.restore();
+      SaleModel.getAllSales.restore();
     })
   })
 
   describe('Quando a venda é localizada', () => {
     it('Retorna um objeto', async() => {
       const result = await SaleModel.getAllSales();
-      expect(result).to.be.an('array');
+      expect(result).to.be.a('array');
     })
 
     it('O array está populado', async() => {
       const result = await SaleModel.getAllSales();
-      expect(result).to.have.greaterThan(0);
+      expect(result).length.greaterThan(0);
     })
   })
 })

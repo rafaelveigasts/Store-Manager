@@ -26,7 +26,7 @@ const findProductById = async (id) => {
     [id],
   );
   const product = result[0];
-
+    
   return product;
 };
 
