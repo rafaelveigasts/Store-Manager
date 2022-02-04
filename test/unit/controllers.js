@@ -146,7 +146,7 @@ describe("Quando chama o controller do Sale", () => {
       sinon.stub(SaleService, "createSalesProducts").resolves({
         code: 400,
         message: {
-          message: "'product_id' is required",
+          message: '"product_id" is required',
         },
       });
     });
@@ -158,7 +158,7 @@ describe("Quando chama o controller do Sale", () => {
     it("É chamado com o status 400", async () => {
       await SaleController.createSale(request, response);
 
-      expect(response.status.calledWith(400)).to.be.true;
+      expect(response.status.calledWith(400)).to.be.equal(true);
     });
   });
 
@@ -169,7 +169,7 @@ describe("Quando chama o controller do Sale", () => {
     before(() => {
       request.body = {
         product_id: 1,
-        quantity: 10,
+        quantity: 5,
       };
 
       response.status = sinon.stub().returns(response);
@@ -180,7 +180,7 @@ describe("Quando chama o controller do Sale", () => {
         itemsSold: [
           {
             product_id: 1,
-            quantity: 10,
+            quantity: 5,
           },
         ],
       });
@@ -193,13 +193,13 @@ describe("Quando chama o controller do Sale", () => {
     it("Chama o cod 201", async () => {
       await SaleController.createSale(request, response);
 
-      expect(response.status.calledWith(201)).to.be.true;
+      expect(response.status.calledWith(201)).to.be.equal(true);
     });
 
     it("é chamado json com o obj", async () => {
       await SaleController.createSale(request, response);
 
-      expect(response.json.calledWith(sinon.match.object)).to.be.true;
+      expect(response.json.calledWith(sinon.match.object)).to.be.equal(true);
     });
   });
 });
@@ -217,12 +217,18 @@ describe("Ao chamao o controler de getSaleById", () => {
       response.status = sinon.stub().returns(response);
       response.json = sinon.stub().returns();
 
-      sinon.stub(SaleService, "getSaleById").resolves({
-        code: 404,
-        message: {
-          message: "Sale not found",
+      sinon.stub(SaleService, "getSaleById").resolves([
+        {
+          date: "2021-09-09T04:54:29.000Z",
+          product_id: 1,
+          quantity: 2,
         },
-      });
+        {
+          date: "2021-09-09T04:54:54.000Z",
+          product_id: 2,
+          quantity: 2,
+        },
+      ]);
     });
 
     after(() => {
