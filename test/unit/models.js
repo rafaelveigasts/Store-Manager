@@ -118,4 +118,67 @@ describe('Verifica se o produto é inserido no DB', () => {
       SaleModel.getSaleById.restore();
     })
   })
+
+  describe('Quando a venda é localizada verifica se:', () => {
+    it('Retorna um array', async() => {
+      const result = await SaleModel.getSaleById(1);
+      expect(result).to.be.an('array');
+    })
+
+    it('O array está populado', async () => {
+      const result = await SaleModel.getSaleById(1);
+      expect(result).to.have.greaterThan(0);
+    })
+  })
+
+  describe('Verifica se a venda não é localizada', async() => {
+    before( async() => {
+      const execute = [[]];
+
+      sinon.stub(connection,'execute').resolves(execute);
+    })
+
+    after( async() => {
+      connection.execute.restore();
+    })
+
+    it('Retorna um null', async() => {
+      const result = await SaleModel.getSaleById(1);
+      expect(result).to.be.null;
+    })
+  })
+
+  describe('Verifica se lista todas as vendas', () => {
+    before( async () => {
+      const execute =[{
+      date: "2021-09-09T04:54:29.000Z",
+      product_id: 1,
+      quantity: 2
+    },
+    {
+      date: "2021-09-09T04:54:54.000Z",
+      product_id: 2,
+      quantity: 2
+    }
+  ]
+
+      sinon.stub(connection,'execute').resolves(execute);
+    })
+
+    after( async() => {
+      connection.execute.restore();
+    })
+  })
+
+  describe('Quando a venda é localizada', () => {
+    it('Retorna um objeto', async() => {
+      const result = await SaleModel.getAllSales();
+      expect(result).to.be.an('array');
+    })
+
+    it('O array está populado', async() => {
+      const result = await SaleModel.getAllSales();
+      expect(result).to.have.greaterThan(0);
+    })
+  })
 })
