@@ -26,6 +26,8 @@ const findProductById = async (id) => {
     [id],
   );
   const product = result[0];
+
+  if (!product) return null;
     
   return product;
 };

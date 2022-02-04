@@ -190,11 +190,45 @@ describe("Verifica se lista todas as vendas", () => {
 describe("Quando a venda é localizada", () => {
   it("Retorna um objeto", async () => {
     const result = await SaleModel.getAllSales();
-    expect(result).to.be.a("array");
+    expect(result).to.be.a('array');
   });
 
   it("O array está populado", async () => {
     const result = await SaleModel.getAllSales();
     expect(result).length.greaterThan(0);
   });
+});
+
+describe('Remove um produto no DB', () => {
+  describe('Remove com sucesso no DB',async() => {
+    const payload = 1;
+
+    before(async() => {
+      const execute = [{ affectedRows: 1 },{}];
+      sinon.stub(connection,'execute').resolves(execute);
+    })
+    after(async() => {
+      connection.execute.restore();
+    })
+    it('retotna um boolean', async() => {
+      const response = await ProductModel.deleteProductById(payload);
+      expect(response).to.be.a('boolean');
+      expect(response).to.be.equal(true);
+    });
+  })
+  describe('não remove com sucesso no DB',async() => {
+    const payload = 10;
+
+    before(async() => {
+      const execute = [{},{}];
+      sinon.stub(connection,'execute').resolves(execute);
+    })
+    after(async() => {
+      connection.execute.restore();
+    })
+    it('retotna um boolean', async() => {
+      const response = await ProductModel.deleteProductById(payload);
+      expect(response).to.be.equal(null);
+    });
+  })
 });

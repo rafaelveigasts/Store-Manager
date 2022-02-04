@@ -89,12 +89,12 @@ describe("Ao chamar o controller com findProductById", () => {
     after(() => {
       ProductService.findProductById.restore();
     });
-  });
-
-  it("404 é chamado1", async () => {
-    await ProductController.findProductById(request, response);
-
-    expect(response.status.calledWith(404)).to.be.equal(true);
+    
+    it("404 é chamado1", async () => {
+      await ProductController.findProductById(request, response);
+      
+      expect(response.status.calledWith(404)).to.equal(true);
+    });
   });
 
   describe("quando é localizado", () => {
@@ -127,7 +127,7 @@ describe("Ao chamar o controller com findProductById", () => {
     it("é chamado o json com objeto", async () => {
       await ProductController.findProductById(request, response);
 
-      expect(response.json.calledWith(sinon.match.object).to.be.equal(true));
+      expect(response.json.calledWith(sinon.match.object)).to.be.equal(true);
     });
   });
 });

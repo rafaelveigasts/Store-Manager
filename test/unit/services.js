@@ -63,7 +63,7 @@ describe("Verifica se insere um produto no DB", () => {
     describe("Quando um produto não é localizado", async () => {
       it("Deve retornar null", async () => {
         const result = await ProductService.findProductById();
-        expect(result).to.be.a("object");
+        expect(result).to.be.a('object');
       });
     });
   });
