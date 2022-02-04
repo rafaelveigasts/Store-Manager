@@ -1,9 +1,9 @@
 const sinon = require("sinon");
 const { expect } = require("chai");
-const ProductService = require("../../services/ProductService");
-const SaleService = require("../../services/SaleService");
-const ProductModel = require("../../models/ProductModel");
-const SaleModel = require("../../models/SaleModel");
+const ProductService = require("../../services/Product");
+const SaleService = require("../../services/Sale");
+const ProductModel = require("../../models/Product");
+const SaleModel = require("../../models/Sale");
 const connection = require("../../models/connection");
 
 describe("Verifica se insere um produto no DB", () => {

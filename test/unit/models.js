@@ -2,8 +2,8 @@ const sinon = require("sinon");
 const { expect } = require("chai");
 
 const connection = require("../../models/connection");
-const ProductModel = require("../../models/ProductModel");
-const SaleModel = require("../../models/SaleModel");
+const ProductModel = require("../../models/Product");
+const SaleModel = require("../../models/Sale");
 
 describe("Verifica se o produto é inserido no DB", () => {
   const payload = {
