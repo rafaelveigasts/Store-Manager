@@ -29,7 +29,7 @@ const createSalesProducts = async (array) => {
   if (validations.message) return validations;
   const id = await createSale();
   const sales = array.map((sale) => [id, sale.product_id, sale.quantity]);
-  await SaleModel.createSalesProducts(id, sales);
+  await SaleModel.createSalesProducts(sales);
   return {
     id,
     itemsSold: array,

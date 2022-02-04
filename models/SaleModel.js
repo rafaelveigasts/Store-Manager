@@ -7,9 +7,10 @@ const createSale = async () => {
   return result.insertId;
 };
 
-const createSalesProducts = async (id, array) => {
+const createSalesProducts = async (array) => {
   const query = 'INSERT INTO StoreManager.sales_products VALUES ?';
-  await connection.query(query, [array]);
+  const result = await connection.query(query, [array]);
+  return { id: result.insertId };
 };
 
 const getAllSales = async () => {
