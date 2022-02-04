@@ -71,7 +71,7 @@ const deleteSaleById = async (id) => {
       message: { message: 'Sale not found' } };
   }
 
-  await SaleModel.deleteSalesProductsById(id);
+  await SaleModel.deleteSaleById(id);
   return sale;
 };
 
