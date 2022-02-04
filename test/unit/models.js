@@ -28,11 +28,15 @@ describe('Verifica se o produto é inserido no DB', () => {
   describe('Verifica se o produto é inserido com sucesso no DB', () => {
     it('Deve retornar um objeto com o produto inserido', async() => {
       const result = await ProductModel.createProduct(payload);
-      expect(result).to.be.an('object');
+      expect(result).to.be.a('object');
+     })
+
+     it('possui as propriedades', async() => {
+      const result = await ProductModel.createProduct(payload);
       expect(result).to.have.property('id');
       expect(result).to.have.property('name');
       expect(result).to.have.property('quantity');
-    })
+     })
   })
 
   describe('Verifica se o produto está no DB', () => {
@@ -43,17 +47,17 @@ describe('Verifica se o produto é inserido no DB', () => {
         quantity: 10,
       }
 
-      sinon.stub(ProductModel, 'findById').resolves(execute);
+      sinon.stub(ProductModel, 'findProductById').resolves(execute);
     })
 
     after( async()=> {
-      ProductModel.findById.restore();
+      ProductModel.findProductById.restore();
     })
   })
 
   describe('Verifica se um produto é localizado com sucesso', () => {
     it('Deve retornar um objeto com o produto localizado', async() => {
-      const result = await ProductModel.findById(payload.id);
+      const result = await ProductModel.findProductById(1);
       expect(result).to.be.an('object');
       expect(result).to.have.property('id');
       expect(result).to.have.property('name');
@@ -69,13 +73,13 @@ describe('Verifica se o produto é inserido no DB', () => {
     })
 
     after( async()=> {
-      ProductModel.findById.restore();
+      connection.execute.restore();
     })
 
     it('Deve retornar um null', async() => {
-      const result = await ProductModel.findById(payload.id);
+      const result = await ProductModel.findProductById();
      
-      expect(result).to.be.null;
+      expect(result).to.be.equal(null);
     })
   })
 
