@@ -63,11 +63,24 @@ const updateSaleById = async (id, arrayBody) => {
   };
 };
 
+const deleteSaleById = async (id) => {
+  const sale = await SaleModel.deleteSaleById(id);
+
+  if (!sale) {
+    return { code: 404, 
+      message: { message: 'Sale not found' } };
+  }
+
+  await SaleModel.deleteSalesProductsById(id);
+  return sale;
+};
+
 module.exports = {
   createSalesProducts,
   getAllSales,
   getSaleById,
   updateSaleById,
+  deleteSaleById,
 };
 
 /* 
