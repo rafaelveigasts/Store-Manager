@@ -213,7 +213,7 @@ describe('Remove um produto no DB', () => {
     it('retotna um boolean', async() => {
       const response = await ProductModel.deleteProductById(payload);
       expect(response).to.be.a('boolean');
-      expect(response).to.be.equal(true);
+      expect(response).to.be.equal(undefined);
     });
   })
   describe('não remove com sucesso no DB',async() => {
@@ -226,7 +226,7 @@ describe('Remove um produto no DB', () => {
     after(async() => {
       connection.execute.restore();
     })
-    it('retotna um boolean', async() => {
+    it('retorna um boolean', async() => {
       const response = await ProductModel.deleteProductById(payload);
       expect(response).to.be.equal(null);
     });

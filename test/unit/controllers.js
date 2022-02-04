@@ -319,3 +319,71 @@ describe("Ao chamar o controller de getAllSales", () => {
     });
   });
 });
+
+describe('Ao chamar o controller de deleteProduct', () => {
+  describe('quando o payload informado não é válido', () => {
+    const response = {};
+    const request = {};
+
+    before(() => {
+      request.params = {};
+
+      response.status = sinon.stub()
+        .returns(response);
+      response.json = sinon.stub()
+        .returns();
+
+        sinon.stub(ProductService, 'deleteProductById')
+        .resolves({ code: 404, 
+          message: { message: 'Product not found' } 
+      })
+    })
+
+    after(() => {
+      ProductService.deleteProductById.restore();
+    });
+
+    it('é chamado o status com o código 404', async () => {
+      await ProductController.deleteProductById(request, response);
+      expect(response.status.calledWith(404)).to.be.equal(true);
+    });
+
+  });
+
+  describe('quando é removido com sucesso', () => {
+    const response = {};
+    const request = {};
+
+    before(() => {
+      request.params = 1;
+
+      response.status = sinon.stub()
+        .returns(response);
+      response.json = sinon.stub()
+        .returns();
+
+      sinon.stub(ProductService, 'deleteProductById')
+        .resolves({
+          id: 1,
+          name : 'teste1',
+          quantity: 2,
+        });
+    })
+
+    after(() => {
+      ProductService.deleteProductById.restore();
+    });
+
+    it('é chamado o status com o código 200', async () => {
+      await ProductController.deleteProductById(request, response);
+
+      expect(response.status.calledWith(200)).to.be.equal(true);
+    });
+
+    it('é chamado o método json com o objeto',async() => {
+      await ProductController.deleteProductById(request, response);
+      expect(response.json.calledWith(sinon.match.object)).to.be.equal(true);
+    })
+
+  });
+});
