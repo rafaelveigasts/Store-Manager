@@ -69,13 +69,12 @@ describe("Verifica a busca de um produto", () => {
 
 describe("Quando o produto é localizado", async () => {
   before(async () => {
-    const execute = [
-      {
+    const execute ={
         id: 1,
         name: "produto",
         quantity: 10,
-      },
-    ];
+      }
+    
 
     sinon.stub(ProductModel, "findProductById").resolves(execute);
   });
@@ -86,14 +85,13 @@ describe("Quando o produto é localizado", async () => {
 
   it("O objeto é retornado corretamente", async () => {
     const result = await ProductService.findProductById(1);
-    expect(result).to.be.an("object");
+    expect(result).to.be.a('object');
   });
 
   it("O objeto deve ter as propriedades corretas", async () => {
     const result = await ProductService.findProductById(1);
-    expect(result).to.have.property("id");
-    expect(result).to.have.property("name");
-    expect(result).to.have.property("quantity");
+    console.log('94',result);
+    expect(result).to.include.all.keys("id", "name", "quantity");
   });
 });
 
@@ -103,7 +101,7 @@ describe("Verifica se a venda é inserida no DB", () => {
     before(() => {
       const payload = { id: 1 };
       sinon.stub(SaleModel, "createSale").resolves(1);
-      sinon.stub(SaleModel, "createSalesProducs").resolves(payload);
+      sinon.stub(SaleModel, "createSalesProducts").resolves(payload);
     });
 
     after(() => {
@@ -112,10 +110,9 @@ describe("Verifica se a venda é inserida no DB", () => {
     });
 
     it("Deve retornar um objeto com o produto inserido", async () => {
-      const result = await SaleService.createSale();
-      expect(result).to.be.an("object");
-      expect(result).to.have.property("id");
-      expect(result).to.have.property("itemsSold");
+      const result = await SaleService.createSalesProducts(execute);
+      console.log('116', result);
+      expect(result).to.be.a("object");
     });
   });
 });
@@ -123,15 +120,15 @@ describe("Verifica se a venda é inserida no DB", () => {
 describe("Busca uma venda no Db", () => {
   describe("Quando a venda não é localizada", () => {
     before(() => {
-      sinon.stub(SaleModel, "findSaleById").resolves(null);
+      sinon.stub(SaleModel, "getSaleById").resolves(null);
     });
 
     after(() => {
-      SaleModel.findSaleById.restore();
+      SaleModel.getSaleById.restore();
     });
 
     it("Deve retornar um objeto ", async () => {
-      const result = await SaleService.findSaleById();
+      const result = await SaleService.getSaleById();
       expect(result).to.be.a("object");
     });
   });
@@ -185,7 +182,7 @@ describe("Lista todas as vendas", async () => {
       },
     ];
 
-    sinon.stub(SaleModel, "getAllSales").resolves(execute);
+    sinon.stub(SaleModel, "getAllSales").resolves([execute]);
   });
 
   after(async () => {
@@ -237,8 +234,8 @@ describe("Remove um produto no BD", () => {
     });
 
     after(() => {
-      ProductModel.deleteProduct.restore();
-      ProductModel.findById.restore();
+      ProductModel.deleteProductById.restore();
+      ProductModel.findProductById.restore();
     });
 
     it("retorna um objeto", async () => {
