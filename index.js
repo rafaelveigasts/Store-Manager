@@ -1,60 +1,56 @@
-require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
+require('dotenv').config();
+const ControlerProduct = require('./controllers/Product');
+const ControllerSale = require('./controllers/Sale');
 
 const app = express();
 app.use(bodyParser.json());
 
-// const errorMiddleware = require('./middlewares/error');
-const ProductController = require('./controllers/Product');
-const SaleController = require('./controllers/Sale');
-
-const {
-  validateProductName,
-  validateProductQuantity,
-} = require('./middlewares/validations');
+const { 
+  checkNameProduct, 
+  checkQuantityProduct,
+} = require('./middlewares/validate');
 
 // não remova esse endpoint, e para o avaliador funcionar
 app.get('/', (_request, response) => {
   response.send();
 });
 
-app.get('/products', ProductController.getAllProducts);
-app.get('/products/:id', ProductController.findProductById);
-app.get('/sales', SaleController.getAllSales);
-app.get('/sales/:id', SaleController.getSaleById);
+app.get('/products', ControlerProduct.getAll);
+app.get('/products/:id', ControlerProduct.findById);
+app.get('/sales', ControllerSale.getAll);
+app.get('/sales/:id', ControllerSale.getById);
 
 app.post(
   '/products',
-  validateProductName,
-  validateProductQuantity,
-  ProductController.createProduct,
+   checkNameProduct, 
+   checkQuantityProduct, 
+   ControlerProduct.create,
 );
 
-app.post('/sales', SaleController.createSale);
+app.post(
+  '/sales',
+  ControllerSale.createSales,
+);
 
 app.put(
   '/products/:id',
-  validateProductQuantity,
-  validateProductName,
-  ProductController.updateProductById,
+  checkNameProduct,
+  checkQuantityProduct,
+  ControlerProduct.update,
 );
-
 app.put(
   '/sales/:id',
-  SaleController.updateSaleById,
+  ControllerSale.update,
 );
 
-app.delete('/products/:id', ProductController.deleteProductById);
-
-app.delete('/sales/:id', SaleController.deleteSaleById);
+app.delete('/products/:id', ControlerProduct.deleteProduct);
+app.delete('/sales/:id', ControllerSale.deleteSale);
 
 app.listen(process.env.PORT, () => {
   console.log(`Escutando na porta ${process.env.PORT}`);
 });
-
-// app.use(errorMiddleware);
-
 /* 
 Detalhe importante: ao fazer o update do item, primeiro verificar a quantidade depois o nome
 Pois nesse caso o é o que se adequa ao requisito. 

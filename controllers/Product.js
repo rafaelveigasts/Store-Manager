@@ -1,75 +1,69 @@
-const ProductService = require('../services/Product');
+const ServiceProduct = require('../services/Product');
 
-const createProduct = async (req, res) => {
+const create = async (req, res) => {
   try {
     const { name, quantity } = req.body;
-    const newProduct = await ProductService.createProduct({ name, quantity });
-    if (newProduct.message) return res.status(newProduct.code).json(newProduct.message);
-    res.status(201).json(newProduct);
+    const product = await ServiceProduct.create({ name, quantity });
+    if (product.message) return res.status(product.code).json(product.message);
+    return res.status(201).json(product);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: error.message });
   }
 };
 
-const getAllProducts = async (req, res) => {
+const getAll = async (_req, res) => {
   try {
-    const products = await ProductService.getAllProducts();
-    res.status(200).json(products);
+    const products = await ServiceProduct.getAll();
+    return res.status(200).json(products);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: error.message });
   }
 };
 
-const findProductById = async (req, res) => {
+const findById = async (req, res) => {
   const { id } = req.params;
   try {
-    const product = await ProductService.findProductById(id);
-    if (product.message) {
-      return res.status(product.code).json(product.message);
-    }
+    const product = await ServiceProduct.findById(id);
+    if (product.message) return res.status(product.code).json(product.message);
     return res.status(200).json(product);
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
 };
 
-const updateProductById = async (req, res) => {
+const update = async (req, res) => {
   const { id } = req.params;
   const { name, quantity } = req.body;
   try {
-    const updatedProduct = await ProductService.updateProductById(
-      id,
-      name,
-      quantity,
-    );
+    const updatedProduct = await ServiceProduct.update(id, name, quantity);
     if (updatedProduct.message) {
       return res.status(updatedProduct.code).json(updatedProduct.message);
-    }
+    } 
     return res.status(200).json(updatedProduct);
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
 };
 
-const deleteProductById = async (req, res) => {
+const deleteProduct = async (req, res) => {
   const { id } = req.params;
   try {
-    const deletedProduct = await ProductService.deleteProductById(id);
-    if (deletedProduct.message) {
-      return res.status(deletedProduct.code).json(deletedProduct.message);
-    }
-    return res.status(200).json(deletedProduct);
+    const result = await ServiceProduct.deleteProduct(id);
+    if (result.message) {
+      return res.status(result.code).json(result.message);
+    } 
+    return res.status(200).json(result);
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
 };
 
 module.exports = {
-  createProduct,
-  getAllProducts,
-  findProductById,
-  updateProductById,
-  deleteProductById,
+  create,
+  getAll,
+  findById,
+  update,
+  deleteProduct,
 };
 
 /* Anotação: controller é a camada mais próxima do usuário.

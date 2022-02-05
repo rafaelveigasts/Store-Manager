@@ -24,7 +24,7 @@ const executeTests = async () => {
   }
 };
 
-describe.only('Testes das camadas Model, Service e Controller', () => {
+describe('Testes das camadas Model, Service e Controller', () => {
   beforeEach(async() => {
     await executeTests();
   })

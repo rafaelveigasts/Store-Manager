@@ -1,45 +1,38 @@
 const connection = require('./connection');
 
-const createProduct = async ({ name, quantity }) => {
-  const [product] = await connection.execute(
-    'INSERT INTO StoreManager.products (name, quantity) VALUES (?, ?)',
-    [name, quantity],
-  );
+const create = async ({ name, quantity }) => {
+  const query = 'INSERT INTO StoreManager.products(name, quantity) VALUES (?, ?)';
+  const [result] = await connection.execute(query, [name, quantity]);
 
   return {
-    id: product.insertId, // no bd id é autoincrement por isso o insertId
+    id: result.insertId,
     name,
     quantity,
   };
 };
 
-const getAllProducts = async () => {
-  const [products] = await connection.execute(
-    'SELECT * FROM StoreManager.products',
-  );
+const getAll = async () => {
+  const query = 'SELECT * FROM StoreManager.products';
+  const [products] = await connection.execute(query);
+
   return products;
 };
 
-const findProductById = async (id) => {
-  const [result] = await connection.execute(
-    'SELECT * FROM StoreManager.products WHERE id = ?',
-    [id],
-  );
+const findById = async (id) => {
+  const query = 'SELECT * FROM StoreManager.products WHERE id = ?';
+  const [result] = await connection.execute(query, [id]);
   const product = result[0];
 
   if (!product) return null;
-    
+
   return product;
 };
 
-const updateProductById = async (id, name, quantity) => {
-  const [updatedProduct] = await connection.execute(
-    'UPDATE StoreManager.products SET name = ?, quantity = ? WHERE id = ?',
-    [name, quantity, id],
-  );
+const update = async (id, name, quantity) => {
+  const query = 'UPDATE StoreManager.products SET name= ?, quantity = ? WHERE id= ?';
+  const [result] = await connection.execute(query, [name, quantity, id]);
 
-  // se não tiver linhas alteradas com o produto atualizado, retorna null
-  if (!updatedProduct.affectedRows) return null;
+  if (!result.changedRows) return null;
 
   return {
     id,
@@ -48,22 +41,43 @@ const updateProductById = async (id, name, quantity) => {
   };
 };
 
-const deleteProductById = async (id) => {
-  const [deletedProduct] = await connection.execute(
-    'DELETE FROM StoreManager.products WHERE id = ?',
-    [id],
-  );
-    if (!deletedProduct.affectedRows) return null;
-  };
+const deleteProduct = async (id) => {
+  const query = 'DELETE FROM StoreManager.products WHERE id= ?';
+  const [result] = await connection.execute(query, [id]);
+  if (!result.affectedRows) return null;
 
-module.exports = {
-  createProduct,
-  getAllProducts,
-  findProductById,
-  updateProductById,
-  deleteProductById,
+  return true;
 };
 
+const decreseQuant = async (id, quantity) => {
+  const query = 'UPDATE StoreManager.products SET quantity = quantity - ? WHERE id = ?';
+  const [result] = await connection.execute(query, [quantity, id]);
+  return result.affectedRows;
+};
+
+const increaseQuant = async (id, quantity) => {
+  const query = 'UPDATE StoreManager.products SET quantity = quantity + ? WHERE id = ?';
+  const [result] = await connection.execute(query, [quantity, id]);
+  return result.affectedRows;
+};
+
+const sumQuant = async (id) => {
+  const query = 'SELECT quantity FROM StoreManager.products WHERE id = ?';
+  const [result] = await connection.execute(query, [id]);
+  const { quantity } = result[0];
+  return quantity;
+};
+
+module.exports = {
+  create,
+  getAll,
+  findById,
+  update,
+  deleteProduct,
+  decreseQuant,
+  increaseQuant,
+  sumQuant,
+};
 /* 
 Anotações:
 O model é a camada mais próxima do BD, aqui executamos de fato as funções la do controller em formato de querys.

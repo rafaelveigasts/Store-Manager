@@ -1,9 +1,9 @@
-const SaleService = require('../services/Sale');
+const ServiceSale = require('../services/Sale');
 
-const createSale = async (req, res) => {
+const createSales = async (req, res) => {
   const { body } = req;
   try {
-    const sales = await SaleService.createSalesProducts(body);
+    const sales = await ServiceSale.createSalesProducts(body);
     if (sales.message) return res.status(sales.code).json(sales.message);
     return res.status(201).json(sales);
   } catch (error) {
@@ -11,19 +11,19 @@ const createSale = async (req, res) => {
   }
 };
 
-const getAllSales = async (req, res) => {
+const getAll = async (_req, res) => {
   try {
-    const sales = await SaleService.getAllSales();
+    const sales = await ServiceSale.getAll();
     return res.status(200).json(sales);
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
 };
 
-const getSaleById = async (req, res) => {
+const getById = async (req, res) => {
   try {
     const { id } = req.params;
-    const sale = await SaleService.getSaleById(id);
+    const sale = await ServiceSale.getById(id);
     if (sale.message) return res.status(sale.code).json(sale.message);
     return res.status(200).json(sale);
   } catch (error) {
@@ -31,11 +31,11 @@ const getSaleById = async (req, res) => {
   }
 };
 
-const updateSaleById = async (req, res) => {
+const update = async (req, res) => {
   try {
     const { id } = req.params;
     const { body } = req;
-    const updatedSale = await SaleService.updateSaleById(id, body);
+    const updatedSale = await ServiceSale.update(id, body);
     if (updatedSale.message) return res.status(updatedSale.code).json(updatedSale.message);
     return res.status(200).json(updatedSale);
   } catch (error) {
@@ -43,23 +43,23 @@ const updateSaleById = async (req, res) => {
   }
 };
 
-const deleteSaleById = async (req, res) => {
+const deleteSale = async (req, res) => {
   try {
     const { id } = req.params;
-    const deletedSale = await SaleService.deleteSaleById(id);
-    if (deletedSale.message) return res.status(deletedSale.code).json(deletedSale.message);
-    return res.status(200).json(deletedSale);
+    const result = await ServiceSale.deleteSale(id);
+    if (result.message) return res.status(result.code).json(result.message);
+    return res.status(200).json(result);
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
 };
 
 module.exports = {
-  createSale,
-  getAllSales,
-  getSaleById,
-  updateSaleById,
-  deleteSaleById,
+  createSales,
+  getAll,
+  getById,
+  update,
+  deleteSale,
 };
 
 /*

@@ -1,322 +1,352 @@
-const sinon = require("sinon");
-const { expect } = require("chai");
+const sinon = require('sinon');
+const {expect} = require('chai');
 
-const SaleService = require("../../services/Sale");
-const ProductService = require("../../services/Product");
-const SaleController = require("../../controllers/Sale");
-const ProductController = require("../../controllers/Product");
+const ProductService = require('../../services/Product');
+const ProductController = require('../../controllers/Product');
+const SaleService = require('../../services/Sale');
+const SaleController = require('../../controllers/Sale');
 
-describe("Ao chamar create no controller", () => {
-  describe("quando o payload não é valido", () => {
+describe('Ao chamar o controller de create', () => {
+  describe('quando o payload informado não é válido', () => {
     const response = {};
     const request = {};
 
     before(() => {
       request.body = {};
 
-      response.status = sinon.stub().returns(response);
-      response.json = sinon.stub().returns();
+      response.status = sinon.stub()
+        .returns(response);
+      response.json = sinon.stub()
+        .returns();
 
-      sinon
-        .stub(ProductService, "createProduct")
-        .resolves({ code: 400, message: { message: "Product not found" } });
-    });
+        sinon.stub(ProductService, 'create')
+        .resolves({ code: 400, 
+          message: { message: 'Product not found' } 
+      })
+    })
 
     after(() => {
-      ProductService.createProduct.restore();
+      ProductService.create.restore();
     });
 
-    it("É chamado com o status 400", async () => {
-      await ProductController.createProduct(request, response);
+    it('é chamado o status com o código 400', async () => {
+      await ProductController.create(request, response);
       expect(response.status.calledWith(400)).to.be.equal(true);
     });
+
   });
 
-  describe("quando o payload é inserido com sucesso", () => {
+  describe('quando é inserido com sucesso', () => {
     const response = {};
     const request = {};
 
     before(() => {
       request.body = {
-        name: "teste 1",
-        quantity: 2,
+        name: 'teste1',
+        quantity: 2
       };
 
-      response.status = sinon.stub().returns(response);
-      response.json = sinon.stub().returns();
+      response.status = sinon.stub()
+        .returns(response);
+      response.json = sinon.stub()
+        .returns();
 
-      sinon
-        .stub(ProductService, "createProduct")
-        .resolves({ id: 1, name: "Produto 1", quantity: 2 });
-    });
+      sinon.stub(ProductService, 'create')
+        .resolves({
+          id: 1,
+          name : 'teste1',
+          quantity: 2,
+        });
+    })
 
     after(() => {
-      ProductService.createProduct.restore();
+      ProductService.create.restore();
     });
 
-    it("É retornado o código 201", async () => {
-      await ProductController.createProduct(request, response);
+    it('é chamado o status com o código 201', async () => {
+      await ProductController.create(request, response);
 
       expect(response.status.calledWith(201)).to.be.equal(true);
     });
 
-    it("É chamado o método json com o obj", async () => {
-      await ProductController.createProduct(request, response);
-
+    it('é chamado o método json com o objeto',async() => {
+      await ProductController.create(request, response);
       expect(response.json.calledWith(sinon.match.object)).to.be.equal(true);
-    });
+    })
+
   });
 });
 
-describe("Ao chamar o controller com findProductById", () => {
-  describe("quando não existe o produto", () => {
+describe('Ao chamar o controller de findById', () => {
+  describe('quando não existe o produto', () => {
     const response = {};
     const request = {};
 
     before(() => {
       request.params = {
-        id: 100,
+        id: 100
       };
 
-      response.status = sinon.stub().returns(response);
-      response.json = sinon.stub().returns();
+      response.status = sinon.stub()
+        .returns(response);
+      response.json = sinon.stub()
+        .returns();
 
-      sinon
-        .stub(ProductService, "findProductById")
-        .resolves({ code: 404, message: { message: "Product not found" } });
+        sinon.stub(ProductService, 'findById')
+        .resolves({ code: 404, 
+          message: { message: 'Product not found' } })
     });
 
     after(() => {
-      ProductService.findProductById.restore();
+      ProductService.findById.restore();
     });
-    
-    it("404 é chamado1", async () => {
-      await ProductController.findProductById(request, response);
-      
-      expect(response.status.calledWith(404)).to.equal(true);
+
+    it('é chamado o status com o código 404', async () => {
+      await ProductController.findById(request, response);
+      expect(response.status.calledWith(404)).to.be.equal(true);
     });
+
   });
 
-  describe("quando é localizado", () => {
+  describe('quando é localizado com sucesso', () => {
     const response = {};
     const request = {};
 
     before(() => {
       request.params = {
-        id: 1,
+        id: 1
       };
 
-      response.status = sinon.stub().returns(response);
-      response.json = sinon.stub().returns();
+      response.status = sinon.stub()
+        .returns(response);
+      response.json = sinon.stub()
+        .returns();
 
-      sinon
-        .stub(ProductService, "findProductById")
-        .resolves({ id: 1, name: "produto A", quantity: 10 });
-    });
+      sinon.stub(ProductService, 'findById')
+        .resolves({
+          id: 1,
+          name: "produto A",
+          quantity: 10
+        });
+    })
 
     after(() => {
-      ProductService.findProductById.restore();
+      ProductService.findById.restore();
     });
 
-    it("É retornado o código 200", async () => {
-      await ProductController.findProductById(request, response);
+    it('é chamado o status com o código 200', async () => {
+      await ProductController.findById(request, response);
 
       expect(response.status.calledWith(200)).to.be.equal(true);
     });
 
-    it("é chamado o json com objeto", async () => {
-      await ProductController.findProductById(request, response);
-
+    it('é chamado o método json com o objeto',async() => {
+      await ProductController.findById(request, response);
       expect(response.json.calledWith(sinon.match.object)).to.be.equal(true);
-    });
+    })
+
   });
 });
 
-describe("Quando chama o controller do Sale", () => {
-  describe("quando o payload é invalido", () => {
+describe('Ao chamar o controller de create sale', () => {
+  describe('quando o payload informado não é válido', () => {
     const response = {};
     const request = {};
 
     before(() => {
       request.body = {};
 
-      response.status = sinon.stub().returns(response);
-      response.json = sinon.stub().returns();
+      response.status = sinon.stub()
+        .returns(response);
+      response.json = sinon.stub()
+        .returns();
 
-      sinon.stub(SaleService, "createSalesProducts").resolves({
-        code: 400,
-        message: {
-          message: '"product_id" is required',
-        },
-      });
+        sinon.stub(SaleService, 'createSalesProducts')
+        .resolves({ code: 400, message: { message: '"product_id" is required' } });
     });
 
     after(() => {
       SaleService.createSalesProducts.restore();
     });
 
-    it("É chamado com o status 400", async () => {
-      await SaleController.createSale(request, response);
-
+    it('é chamado o status com o código 400', async () => {
+      await SaleController.createSales(request, response);
       expect(response.status.calledWith(400)).to.be.equal(true);
     });
+
   });
 
-  describe("qdo vai com sucesso", () => {
+  describe('quando é inserido com sucesso', () => {
     const response = {};
     const request = {};
 
     before(() => {
-      request.body = {
-        product_id: 1,
-        quantity: 5,
-      };
+      request.body = [
+        {
+          product_id: 1,
+          quantity: 5,
+        }
+      ];
 
-      response.status = sinon.stub().returns(response);
-      response.json = sinon.stub().returns();
+      response.status = sinon.stub()
+        .returns(response);
+      response.json = sinon.stub()
+        .returns();
 
-      sinon.stub(SaleService, "createSalesProducts").resolves({
-        id: 1,
-        itemsSold: [
-          {
-            product_id: 1,
-            quantity: 5,
-          },
-        ],
-      });
-    });
+      sinon.stub(SaleService, 'createSalesProducts')
+        .resolves({
+          id: 1,
+          itemsSold: [
+            {
+              product_id: 1,
+              quantity: 5
+            }
+          ]
+        });
+    })
 
     after(() => {
       SaleService.createSalesProducts.restore();
     });
 
-    it("Chama o cod 201", async () => {
-      await SaleController.createSale(request, response);
-
+    it('é chamado o status com o código 201', async () => {
+      await SaleController.createSales(request, response);
       expect(response.status.calledWith(201)).to.be.equal(true);
     });
 
-    it("é chamado json com o obj", async () => {
-      await SaleController.createSale(request, response);
-
+    it('é chamado o método json com o objeto',async() => {
+      await ProductController.create(request, response);
       expect(response.json.calledWith(sinon.match.object)).to.be.equal(true);
-    });
+    })
+
   });
 });
 
-describe("Ao chamao o controler de getSaleById", () => {
-  describe("quando o payload não é valido", () => {
+describe('Ao chamar o controller de getById', () => {
+  describe('quando o payload informado não é válido', () => {
     const response = {};
     const request = {};
 
     before(() => {
       request.params = {
-        id: 1,
+        id: 1
       };
 
-      response.status = sinon.stub().returns(response);
-      response.json = sinon.stub().returns();
+      response.status = sinon.stub()
+        .returns(response);
+      response.json = sinon.stub()
+        .returns();
 
-      sinon
-        .stub(SaleService, "getSaleById")
-        .resolves({ code: 404, message: { message: "Sale not found" } });
+        sinon.stub(SaleService, 'getById')
+        .resolves({ code: 404, 
+          message: { message: 'Sale not found' } });
     });
 
     after(() => {
-      SaleService.getSaleById.restore();
+      SaleService.getById.restore();
     });
 
-    it("É chamado com o status 404", async () => {
-      await SaleController.getSaleById(request, response);
+    it('é chamado o status com o código 404', async () => {
+      await SaleController.getById(request, response);
 
       expect(response.status.calledWith(404)).to.be.equal(true);
     });
+
   });
 
-  describe("quando a venda é localizada com sucesso", () => {
+  describe('quando é localizada a venda com sucesso', () => {
     const response = {};
     const request = {};
 
     before(() => {
       request.params = {
-        id: 1,
+        id: 1
       };
 
-      response.status = sinon.stub().returns(response);
-      response.json = sinon.stub().returns();
+      response.status = sinon.stub()
+        .returns(response);
+      response.json = sinon.stub()
+        .returns();
 
-      sinon.stub(SaleService, "getSaleById").resolves([
-        {
-          date: "2021-09-09T04:54:29.000Z",
-          product_id: 1,
-          quantity: 2,
-        },
-        {
-          date: "2021-09-09T04:54:54.000Z",
-          product_id: 2,
-          quantity: 2,
-        },
-      ]);
-    });
+      sinon.stub(SaleService, 'getById')
+        .resolves([
+          { 
+            date: "2021-09-09T04:54:29.000Z",
+            product_id: 1,
+            quantity: 2
+          },
+          {
+            date: "2021-09-09T04:54:54.000Z",
+            product_id: 2,
+            quantity: 2
+          }
+        ]);
+    })
 
     after(() => {
-      SaleService.getSaleById.restore();
+      SaleService.getById.restore();
     });
 
-    it("É chamado com o status 200", async () => {
-      await SaleController.getSaleById(request, response);
+    it('é chamado o status com o código 200', async () => {
+      await SaleController.getById(request, response);
 
       expect(response.status.calledWith(200)).to.be.equal(true);
     });
 
-    it("É chamado o json com o objeto", async () => {
-      await SaleController.getSaleById(request, response);
-
+    it('é chamado o método json com o objeto',async() => {
+      await SaleController.getById(request, response);
       expect(response.json.calledWith(sinon.match.array)).to.be.equal(true);
-    });
+    })
+
   });
 });
 
-describe("Ao chamar o controller de getAllSales", () => {
-  describe("quando litas todas as vendas com sucesso", () => {
+describe('Ao chamar o controller de getAll', () => {
+
+  describe('quando é listado todas as vendas com sucesso', () => {
     const response = {};
     const request = {};
 
     before(() => {
       request.body = {};
 
-      response.status = sinon.stub().returns(response);
-      response.json = sinon.stub(SaleService, "getAllSales").resolves([
-        {
-          saleId: 1,
-          date: "2021-09-09T04:54:29.000Z",
-          product_id: 1,
-          quantity: 2,
-        },
-        {
-          saleId: 1,
-          date: "2021-09-09T04:54:54.000Z",
-          product_id: 2,
-          quantity: 2,
-        },
-      ]);
-    });
+      response.status = sinon.stub()
+        .returns(response);
+      response.json = sinon.stub()
+        .returns();
+
+      sinon.stub(SaleService, 'getAll')
+        .resolves([
+          {
+            saleId: 1,
+            date: "2021-09-09T04:54:29.000Z",
+            product_id: 1,
+            quantity: 2
+          },
+          {
+            saleId: 1,
+            date: "2021-09-09T04:54:54.000Z",
+            product_id: 2,
+            quantity: 2
+          }
+        ]);
+    })
 
     after(() => {
-      SaleService.getAllSales.restore();
+      SaleService.getAll.restore();
     });
 
-    it("É chamado com o status 200", async () => {
-      await SaleController.getAllSales(request, response);
+    it('é chamado o status com o código 200', async () => {
+      await SaleController.getAll(request, response);
 
       expect(response.status.calledWith(200)).to.be.equal(true);
     });
 
-    it("É chamado o json com o objeto", async () => {
-      await SaleController.getAllSales(request, response);
-
+    it('é chamado o método json com o objeto',async() => {
+      await SaleController.getAll(request, response);
       expect(response.json.calledWith(sinon.match.array)).to.be.equal(true);
-    });
+    })
+
   });
 });
 
@@ -333,18 +363,18 @@ describe('Ao chamar o controller de deleteProduct', () => {
       response.json = sinon.stub()
         .returns();
 
-        sinon.stub(ProductService, 'deleteProductById')
+        sinon.stub(ProductService, 'deleteProduct')
         .resolves({ code: 404, 
           message: { message: 'Product not found' } 
       })
     })
 
     after(() => {
-      ProductService.deleteProductById.restore();
+      ProductService.deleteProduct.restore();
     });
 
     it('é chamado o status com o código 404', async () => {
-      await ProductController.deleteProductById(request, response);
+      await ProductController.deleteProduct(request, response);
       expect(response.status.calledWith(404)).to.be.equal(true);
     });
 
@@ -362,7 +392,7 @@ describe('Ao chamar o controller de deleteProduct', () => {
       response.json = sinon.stub()
         .returns();
 
-      sinon.stub(ProductService, 'deleteProductById')
+      sinon.stub(ProductService, 'deleteProduct')
         .resolves({
           id: 1,
           name : 'teste1',
@@ -371,18 +401,85 @@ describe('Ao chamar o controller de deleteProduct', () => {
     })
 
     after(() => {
-      ProductService.deleteProductById.restore();
+      ProductService.deleteProduct.restore();
     });
 
     it('é chamado o status com o código 200', async () => {
-      await ProductController.deleteProductById(request, response);
+      await ProductController.deleteProduct(request, response);
 
       expect(response.status.calledWith(200)).to.be.equal(true);
     });
 
     it('é chamado o método json com o objeto',async() => {
-      await ProductController.deleteProductById(request, response);
+      await ProductController.deleteProduct(request, response);
       expect(response.json.calledWith(sinon.match.object)).to.be.equal(true);
+    })
+
+  });
+});
+
+describe('Ao chamar o controller de deleteSale', () => {
+  describe('quando o payload informado não é válido', () => {
+    const response = {};
+    const request = {};
+
+    before(() => {
+      request.params = {};
+
+      response.status = sinon.stub()
+        .returns(response);
+      response.json = sinon.stub()
+        .returns();
+
+        sinon.stub(SaleService, 'deleteSale')
+        .resolves({ code: 404, 
+          message: { message: 'Sale not found' } 
+      })
+    })
+
+    after(() => {
+      SaleService.deleteSale.restore();
+    });
+
+    it('é chamado o status com o código 404', async () => {
+      await SaleController.deleteSale(request, response);
+      expect(response.status.calledWith(404)).to.be.equal(true);
+    });
+
+  });
+
+  describe('quando é removido com sucesso', () => {
+    const response = {};
+    const request = {};
+
+    before(() => {
+      request.params = 1;
+
+      response.status = sinon.stub()
+        .returns(response);
+      response.json = sinon.stub()
+        .returns();
+
+      sinon.stub(SaleService, 'deleteSale')
+        .resolves([{
+          date: "2021-09-09T04:54:29.000Z",
+          product_id: 1,
+          quantity: 2
+        }]);
+    })
+
+    after(() => {
+      SaleService.deleteSale.restore();
+    });
+
+    it('é chamado o status com o código 200', async () => {
+      await SaleController.deleteSale(request, response);
+      expect(response.status.calledWith(200)).to.be.equal(true);
+    });
+
+    it('é chamado o método json com o array',async() => {
+      await SaleController.deleteSale(request, response);
+      expect(response.json.calledWith(sinon.match.array)).to.be.equal(true);
     })
 
   });

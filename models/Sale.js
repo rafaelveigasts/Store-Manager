@@ -13,8 +13,9 @@ const createSalesProducts = async (array) => {
   return { id: result.insertId };
 };
 
-const getAllSales = async () => {
-  const query = `SELECT p.sale_id as saleId,s.date,
+const getAll = async () => {
+  const query = `
+  SELECT p.sale_id as saleId,s.date,
   p.product_id,p.quantity
   FROM StoreManager.sales_products as p
   INNER JOIN StoreManager.sales as s
@@ -23,7 +24,7 @@ const getAllSales = async () => {
   return sales;
 };
 
-const getSaleById = async (id) => {
+const getById = async (id) => {
   const query = `SELECT s.date,p.product_id,p.quantity
   FROM StoreManager.sales_products as p
   INNER JOIN StoreManager.sales as s
@@ -36,8 +37,9 @@ const getSaleById = async (id) => {
   return sale;
 };
 
-const updateSaleById = async (id, { product_id: productId, quantity }) => {
-  const query = `UPDATE StoreManager.sales_products 
+const update = async (id, { product_id: productId, quantity }) => {
+  const query = `
+  UPDATE StoreManager.sales_products 
   SET product_id = ?, quantity= ?
   WHERE sale_id = ?`;
   const [result] = await connection.execute(query, [productId, quantity, id]);
@@ -45,8 +47,10 @@ const updateSaleById = async (id, { product_id: productId, quantity }) => {
   return result;
 };
 
-const deleteSaleById = async (id) => {
-  const query = 'DELETE FROM StoreManager.sales WHERE id = ?';
+const deleteSale = async (id) => {
+  const query = `
+  DELETE FROM StoreManager.sales
+  WHERE id = ?`;
   const [result] = await connection.execute(query, [id]);
   if (!result.affectedRows) return null;
   return true;
@@ -55,18 +59,8 @@ const deleteSaleById = async (id) => {
 module.exports = {
   createSale,
   createSalesProducts,
-  getAllSales,
-  getSaleById,
-  updateSaleById,
-  deleteSaleById,
+  getAll,
+  getById,
+  update,
+  deleteSale,
 };
-
-/* 
-A funcção createSale é a responsável por criar uma venda gerando um id para ela.
-
-A função createSalesProducts vai receber um id de venda e um array de objetos que representam os produtos que serão vendidos.
-
-A função getAllSales vai buscar nas tabelas sales_products e sales todos os produtos vendidos
-
-Essas funções com o sequelize ficariam bem mais fáceis de serem implementadas.
-*/

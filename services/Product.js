@@ -1,50 +1,65 @@
-const ProductModel = require('../models/Product');
+const ModelProduct = require('../models/Product');
 
-const createProduct = async ({ name, quantity }) => {
-  const product = await ProductModel.createProduct({ name, quantity });
-  return product;
+const create = async ({ name, quantity }) => {
+  const products = await ModelProduct.getAll();
+  const productExists = products.some((product) => product.name === name);
+
+  if (productExists) {
+    return { code: 409, 
+      message: { message: 'Product already exists' } };
+  }
+
+  const response = await ModelProduct.create({ name, quantity });
+
+  return response;
 };
 
-const getAllProducts = async () => {
-  const products = await ProductModel.getAllProducts();
+const getAll = async () => {
+  const products = await ModelProduct.getAll();
   return products;
 };
 
-const findProductById = async (id) => {
-  const product = await ProductModel.findProductById(id);
-  if (!product) {
-    return { code: 404, message: { message: 'Product not found' } };
+const findById = async (id) => {
+  const foundedProduct = await ModelProduct.findById(id);
+
+  if (!foundedProduct) {
+    return { code: 404, 
+      message: { message: 'Product not found' } };
   }
 
-  return product;
+  return foundedProduct;
 };
 
-const updateProductById = async (id, name, quantity) => {
-  const updatedProduct = await ProductModel.updateProductById(id, name, quantity);
+const update = async (id, name, quantity) => {
+  const updatedProduct = await ModelProduct.update(id, name, quantity);
+
   if (!updatedProduct) {
-    return { code: 404, message: { message: 'Product not found' } };
+    return { code: 404, 
+      message: { message: 'Product not found' } };
   }
+
   return updatedProduct;
 };
 
-const deleteProductById = async (id) => {
-  const deletedProduct = await ProductModel.findProductById(id);
-  if (!deletedProduct) {
-    return { code: 404, message: { message: 'Product not found' } };
-  }
-  await ProductModel.deleteProductById(id);
+const deleteProduct = async (id) => {
+  const foundedProduct = await ModelProduct.findById(id);
 
-  return deletedProduct;
+  if (!foundedProduct) {
+    return { code: 404, 
+      message: { message: 'Product not found' } };
+  }
+  await ModelProduct.deleteProduct(id);
+
+  return foundedProduct;
 };
 
 module.exports = {
-  createProduct,
-  getAllProducts,
-  findProductById,
-  updateProductById,
-  deleteProductById,
+  create,
+  getAll,
+  findById,
+  update,
+  deleteProduct,
 };
-
 /*  Anotação: como service está uma camada acima do model, ele vai passar as informações a serem adicionadas no DB,
 Sempre passar as funções do model aqui com o mesmo nome, pois é daqui que ela vai para o controller.
 

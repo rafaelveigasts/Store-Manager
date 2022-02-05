@@ -1,4 +1,5 @@
-const SaleModel = require('../models/Sale');
+const ModelSale = require('../models/Sale');
+const ModelProduct = require('../models/Product');
 
 const checkKey = (array) => {
  const ckekProductKey = array.some((sale) => sale.product_id === undefined);
@@ -19,30 +20,54 @@ const checkKey = (array) => {
   return true;
 };
 
+const checkQuantStock = async (array) => {
+  const saleIsGrantStock = array.reduce(async (acc, curr) => {
+    const quant = await ModelProduct.sumQuant(curr.product_id);
+    if (curr.quantity > quant) return true;
+    return acc;
+  }, false);
+
+  const result = await saleIsGrantStock;
+
+  if (result) {
+    return { code: 422, message: { message: 'Such amount is not permitted to sell' } };
+  }
+ return result;
+};
+
 const createSale = async () => {
-  const result = await SaleModel.createSale();
+  const result = await ModelSale.createSale();
   return result;
+};
+
+const decreaseQuant = (array) => {
+ Promise.all(array.map(async (sale) => {
+    await ModelProduct.decreseQuant(sale.product_id, sale.quantity);
+  }));
 };
 
 const createSalesProducts = async (array) => {
   const validations = checkKey(array);
   if (validations.message) return validations;
+  const validateStock = await checkQuantStock(array);
+  if (validateStock.message) return validateStock;
   const id = await createSale();
+  decreaseQuant(array);
   const sales = array.map((sale) => [id, sale.product_id, sale.quantity]);
-  await SaleModel.createSalesProducts(sales);
+  await ModelSale.createSalesProducts(sales);
   return {
     id,
     itemsSold: array,
   };
 };
 
-const getAllSales = async () => {
-  const sales = await SaleModel.getAllSales();
+const getAll = async () => {
+  const sales = await ModelSale.getAll();
   return sales;
 };
 
-const getSaleById = async (id) => {
-  const sale = await SaleModel.getSaleById(id);
+const getById = async (id) => {
+  const sale = await ModelSale.getById(id);
 
   if (!sale) {
     return { code: 404, 
@@ -52,35 +77,40 @@ const getSaleById = async (id) => {
   return sale;
 };
 
-const updateSaleById = async (id, arrayBody) => {
+const update = async (id, arrayBody) => {
   const validations = checkKey(arrayBody);
   if (validations.message) return validations;
   const [saleUpdate] = arrayBody;
-  await SaleModel.updateSaleById(id, saleUpdate);
+  await ModelSale.update(id, saleUpdate);
   return {
     saleId: id,
     itemUpdated: arrayBody,
   };
 };
 
-const deleteSaleById = async (id) => {
-  const sale = await SaleModel.getSaleById(id);
+const deleteSale = async (id) => {
+  const foundedSales = await ModelSale.getById(id);
 
-  if (!sale) {
+  if (!foundedSales) {
     return { code: 404, 
       message: { message: 'Sale not found' } };
   }
+  Promise.all(
+    foundedSales.map(async (sale) => { 
+      ModelProduct.increaseQuant(sale.product_id, sale.quantity); 
+    }),
+  );
+   await ModelSale.deleteSale(id);
 
-  await SaleModel.deleteSaleById(id);
-  return sale;
+   return foundedSales;
 };
 
 module.exports = {
   createSalesProducts,
-  getAllSales,
-  getSaleById,
-  updateSaleById,
-  deleteSaleById,
+  getAll,
+  getById,
+  update,
+  deleteSale,
 };
 
 /* 
