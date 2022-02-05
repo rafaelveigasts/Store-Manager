@@ -82,12 +82,14 @@ module.exports = {
 Anotações:
 O model é a camada mais próxima do BD, aqui executamos de fato as funções la do controller em formato de querys.
 
-Observação: a função findProductById retorna um array de resultados, por isso precisamos pegar o primeiro elemento do array.
+Observação: a função findById retorna um array de resultados, por isso precisamos pegar o primeiro elemento do array.
 
-A função updateProductById faz a atualização de um produto no bd.
+A função update faz a atualização de um produto no bd.
 AffectedRows é uma propriedade do objeto que retorna do bd, se houve alguma alteração no bd. 
 Obtém o número de linhas afetadas pelo último INSERT, UPDATE, REPLACE ou DELETE associado ao link_identifier.
 fonte: https://www.php.net/manual/pt_BR/function.mysql-affected-rows.php
 Pra finalizar retornamos com o produto atualizado.
 
+as funções decrease, increase e sumQuant efetuam operacoes matematicas no bd.
+onde elas recebem o id do produto e a quantidade a ser alterada e dependendo da função soma ou diminui a quantidade.
 */

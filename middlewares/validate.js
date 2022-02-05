@@ -33,3 +33,14 @@ module.exports = {
   checkNameProduct,
   checkQuantityProduct,
 };
+
+/* anotações:
+
+Primeiro validamos se o body não veio vazio, se veio vazio retornamos um erro 400
+depois se o campo name tem menos de 5 caracteres retornamos um erro 422
+chamamos o next para poder carregar o próximo middleware
+
+depois validamos se o body.quantity é undefined, se for retornamos um erro 400
+depois validamos se o body.quantity é um número, se for retornamos um erro 422
+chamamos o next para poder carregar o próximo middleware
+*/

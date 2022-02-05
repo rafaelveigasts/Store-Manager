@@ -114,7 +114,7 @@ module.exports = {
 };
 
 /* 
-No controle do sale iremos passar um array para o model então temos que efetuar a sua validação com high order functions.
+No controle do sale diferente do product, iremos passar o body inteiro da requisição, um array para o model então temos que efetuar a sua validação com high order functions.
 
 CreateSale é uma função que cria uma venda no banco de dados.
 
@@ -123,9 +123,19 @@ Passa pela validação, caso tenha uma chave de erro retorna o erro.
 
 A constante id espera o banco de dados criar uma venda genérica, essa venda só retorna o numero do id no model.
 
-O salesProducts é um array de arrays que representa os produtos que serão vendidos.
+O sales é um array de arrays que representa os produtos que serão vendidos.
 
 Mas quando o array de produtos é passado para o model, ele precisa de um id de venda, no formato de objeto, ou seja, um objeto que contenha um id de venda e dentro dele um array de produtos que são objetos com id de produto e quantidade.
 
 Obs.: não sei pq mas se deixar a validação do array separado ele não passa.
- */
+
+a função update recebe um id pelo parametro, e um array de objetos que é o body da requisição que representam os produtos que serão vendidos. 
+fazemos a requisição no banco e atribuimos a uma variavel e verificamos se ela tem a chave message, se tiver retornamos o erro.
+se não tiver a chave message, retornamos o id da venda e o array de produtos que foram vendidos.
+
+delete vai receber o id do parametro e usar o findbyid para encontrar a venda e deletar. Se não encontrar o id retorna um 404. 
+Se por acaso a venda for excluída ele chama a função para aumentar a quantidade de produtos no estoque.
+
+a funcao checkquantstock verifica no bd a quantidade com a função sumquant, se a quantidade for maior que a quantidade que está sendo vendida retorna true, se não retorna false.
+
+*/

@@ -64,3 +64,17 @@ module.exports = {
   update,
   deleteSale,
 };
+
+/* 
+Anotações: aqui o createSale vai inserir um valor vazio e retornar um número de id que auto incrementado na tabela
+
+a funcao createSalesProducts vai receber um array de objetos com os dados do produto e vai inserir na tabela
+
+a funcao getAll vai retornar todos os dados da tabela
+
+a funcao getById vai retornar todos os dados da tabela com o id passado por parametro
+
+a funcao update vai atualizar os dados da tabela com o id passado por parametro
+
+e o deleteSale vai deletar a venda com o id passado por parametro
+*/
