@@ -2,6 +2,7 @@ const ServiceSale = require('../services/Sale');
 
 const createSales = async (req, res) => {
   const { body } = req;
+  console.log('controller', body);
   try {
     const sales = await ServiceSale.createSalesProducts(body);
     if (sales.message) return res.status(sales.code).json(sales.message);
@@ -36,7 +37,7 @@ const update = async (req, res) => {
     const { id } = req.params;
     const { body } = req;
     const updatedSale = await ServiceSale.update(id, body);
-    if (updatedSale.message) return res.status(updatedSale.code).json(updatedSale.message);
+    if (updatedSale.message) { return res.status(updatedSale.code).json(updatedSale.message); }
     return res.status(200).json(updatedSale);
   } catch (error) {
     return res.status(500).json({ message: error.message });

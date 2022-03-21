@@ -10,7 +10,6 @@ const create = async ({ name, quantity }) => {
   }
 
   const response = await ModelProduct.create({ name, quantity });
-
   return response;
 };
 
