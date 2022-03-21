@@ -26,7 +26,3 @@ Você vai desenvolver todas as camadas da API (Models, Services caso necessário
 Através dessa aplicação, será possível realizar as operações básicas que se pode fazer em um determinado banco de dados: Criação, Leitura, Atualização e Exclusão (ou `CRUD`, para as pessoas mais mais íntimas 😜).
 
 Você deve utilizar o banco MySQL para a gestão de dados. Além disso, a API deve ser RESTful.
-ega
-
-  - Serão `3` dias de projeto.
-  - Data de entrega para avaliação final do projeto: `03/02/2022 - 14:00h`.
